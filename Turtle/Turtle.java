@@ -23,6 +23,7 @@ public class Turtle extends JFrame implements ComponentListener {
 	// private Graphics2D context;
 	private int x, y;
 	private int width, height;
+	private boolean penDown;
 	private double heading;
 	private Vector points;
 
@@ -52,10 +53,10 @@ public class Turtle extends JFrame implements ComponentListener {
 			super(_x, _y, _penDown);
 		}
 		public DrawPoint(int _x, int _y) {
-			this(_x, _y, true);
+			this(_x, _y, penDown);
 		}
 		public DrawPoint() {
-			this(0, 0, true);
+			this(x, y, penDown);
 		}
 
 		public String toString() {
@@ -67,12 +68,12 @@ public class Turtle extends JFrame implements ComponentListener {
 		protected Color fgColor;
 
 		public DrawContext() {
-			super(0, 0, false);
+			super(x, y, penDown);
 			bgColor = null;
 			fgColor = null;
 		}
 		public DrawContext(Color bg, Color fg) {
-			super(0, 0, false);
+			super(x, y, penDown);
 			bgColor = bg;
 			fgColor = fg;
 		}
@@ -199,13 +200,7 @@ public class Turtle extends JFrame implements ComponentListener {
 	 * @param  dist   how far to move forward
 	 */
 	public void backward(int dist) {
-		double ang = Math.toRadians(this.heading);
-		int to_x = this.x - (int) (dist * Math.sin(ang));
-		int to_y = this.y + (int) (dist * Math.cos(ang));
-		points.add(new DrawPoint(to_x, to_y, true));
-
-		this.x = to_x;
-		this.y = to_y;
+		forward(-dist);
 	}
 
 	/**
@@ -229,11 +224,10 @@ public class Turtle extends JFrame implements ComponentListener {
 	 * @param   deg     how many degrees to rotate
 	 */
 	public void left(double deg) {
-		this.heading -= deg;
+		this.heading -= (deg % 360);
 		if(this.heading < 0) {
 			this.heading += 360;
 		}
-		// this.dumpTurtleStatus();
 	}
 
 	/**
@@ -242,11 +236,7 @@ public class Turtle extends JFrame implements ComponentListener {
 	 * @param   deg     how many degrees to rotate
 	 */
 	public void right(double deg) {
-		this.heading += deg;
-		if(this.heading > 360) {
-			this.heading -= 360;
-		}
-		// this.dumpTurtleStatus();
+		left(-deg);
 	}
 
 	/**
