@@ -10,5 +10,6 @@ public class TestTurtle
 		Turtle myTurtle = new Turtle("Hello Turtle", 500, 500);
 		myTurtle.setVisible(true);
 
+		// Some random comment
 	}
 }
