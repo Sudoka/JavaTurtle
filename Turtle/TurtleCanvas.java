@@ -7,6 +7,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.awt.Point;
+import java.util.Queue;
+import java.util.LinkedList;
 
 import javax.swing.JPanel;
 
@@ -125,10 +128,49 @@ public class TurtleCanvas extends JPanel {
     	// put some text on the bitmap
     }
 
-    public void drawArc(int x, int y, int r, double rads) {
+    public void drawArc(int x, int y, int radius, double radStart, double radArc) {
     	// Should implement: http://en.wikipedia.org/wiki/Midpoint_circle_algorithm
+    	
+    	int f = 1 - radius;
     }
     
+    
+    public void floodFill(int x, int y) {
+		int emptyColor = canvas.getRGB(x, y);
+		int pColor = penColor.getRGB();
+		int h = canvas.getHeight();
+		int w = canvas.getWidth();
+		
+		boolean[][] visited = new boolean[w][h];
+		
+		Queue<Point> q = new LinkedList<Point>();
+		
+		q.add(new Point(x, y));
+		
+		while (!q.isEmpty())
+		{
+			Point p = q.remove();			
+			if (visited[p.x][p.y]) continue;
+			else visited[p.x][p.y] = true;
+			if (p.x >= 0 && p.y >= 0 && p.x < w && p.y < h)
+			{
+				if (canvas.getRGB(p.x, p.y) == emptyColor)
+				{
+					canvas.setRGB(p.x, p.y, pColor);
+					
+					//System.out.println("Painted (" + p.x + ", " + p.y + ")");
+					
+					if (!visited[p.x-1][p.y]) q.add(new Point(p.x-1, p.y));
+					if (!visited[p.x][p.y-1]) q.add(new Point(p.x, p.y-1));
+					if (!visited[p.x+1][p.y]) q.add(new Point(p.x+1, p.y));
+					if (!visited[p.x][p.y+1]) q.add(new Point(p.x, p.y+1));
+				} 
+			}
+		}
+	}
+    
+    
+    /*
     public void floodFill(int x, int y) {
 		int emptyColor = canvas.getRGB(x, y);
 		
@@ -136,17 +178,17 @@ public class TurtleCanvas extends JPanel {
 	}
 	
 	private void floodFillR(int x, int y, int emptyColor) {
-		if (x < 0 || y < 0 || x > canvas.getWidth() - 1 || y > canvas.getWidth() - 1) return;
-		
 		if (canvas.getRGB(x, y) != emptyColor) return;
+		if (x < 0 || y < 0 || x > canvas.getWidth() - 1 || y > canvas.getWidth() - 1) return;
 		
 		canvas.setRGB(x, y, penColor.getRGB());
 		
 		floodFillR(x-1, y, emptyColor);
-		floodFillR(x, y-1, emptyColor);
 		floodFillR(x+1, y, emptyColor);
+		floodFillR(x, y-1, emptyColor);
 		floodFillR(x, y+1, emptyColor);
 	}
+	*/
     
     public void setBackgroundColor(Color _bgColor) {
 		bgColor = _bgColor;
