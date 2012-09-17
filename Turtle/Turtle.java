@@ -181,8 +181,11 @@ public class Turtle extends JFrame implements ComponentListener {
 		TurtleState cur = states.peek();
 		int x1 = cur.x;
 		int y1 = cur.y;
-		int x2 = x;
-		int y2 = y;
+		int x2 = (canvas.getWidth() /2) + x;
+		int y2 = (canvas.getHeight()/2) + y;
+
+		// System.out.println(x+" "+y+" "+canvas.getWidth()+" "+canvas.getHeight());
+		// System.out.println(x1+" "+y1+" "+x2+" "+y2);
 
 		if(cur.penDown)
 			canvas.drawLine(x1, y1, x2, y2);
@@ -283,16 +286,19 @@ public class Turtle extends JFrame implements ComponentListener {
 	public Dimension getPreferredSize() {
 		return new Dimension(canvas.getWidth(), canvas.getHeight());
 	}
-	
-	public void TempDrawLine(int x0, int y0, int x1, int y1) {
+
+	/**
+	 *		Test harnass-y stuff
+	 */
+	public void tempDrawLine(int x0, int y0, int x1, int y1) {
 		canvas.drawLine(x0, y0, x1, y1);
 	}
-	
-	public void TempFloodFill(int x, int y) {
+
+	public void tempFloodFill(int x, int y) {
 		canvas.floodFill(x, y);
 	}
-	
-	public void TempSetPenColor(Color c)
+
+	public void tempSetPenColor(Color c)
 	{
 		canvas.setPenColor(c);
 	}
