@@ -9,6 +9,15 @@ public class TestTurtle
 
 		Turtle myTurtle = new Turtle("Hello Turtle", 500, 500);
 		myTurtle.setVisible(true);
+		
+		myTurtle.TempDrawLine(400, 400, 250, 250);
+		myTurtle.TempDrawLine(250, 250, 100, 400);
+		myTurtle.TempDrawLine(100, 400, 400, 400);
+		
+		myTurtle.TempSetPenColor(Color.RED);
+		
+		myTurtle.TempFloodFill(250, 300);
+		
 
 		// Some random comment
 	}

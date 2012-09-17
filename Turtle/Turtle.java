@@ -214,4 +214,17 @@ public class Turtle extends JFrame implements ComponentListener {
 	public Dimension getPreferredSize() {
 		return new Dimension(canvas.getWidth(), canvas.getHeight());
 	}
+	
+	public void TempDrawLine(int x0, int y0, int x1, int y1) {
+		canvas.drawLine(x0, y0, x1, y1);
+	}
+	
+	public void TempFloodFill(int x, int y) {
+		canvas.floodFill(x, y);
+	}
+	
+	public void TempSetPenColor(Color c)
+	{
+		canvas.setPenColor(c);
+	}
 }

@@ -60,10 +60,55 @@ public class TurtleCanvas extends JPanel {
     }
 
 
-    public void drawLine(int x1, int y1, int x2, int y2) {
+    public void drawLine(int x0, int y0, int x1, int y1) {
         int color = penColor.getRGB();
 
-        // Should implement: http://en.wikipedia.org/wiki/Bresenham's_line_algorithm
+        boolean steep = Math.abs(y1 - y0) > Math.abs(x1 - x0);
+        if (steep) {
+			int temp = x0;
+			x0 = y0;
+			y0 = temp;
+			
+			temp = x1;
+			x1 = y1;
+			y1 = temp;
+		}
+		if (x0 > x1) {
+			int temp = x0;
+			x0 = x1;
+			x1 = temp;
+			
+			temp = y0;
+			y0 = y1;
+			y1 = temp;
+		}
+		
+		int deltax = x1 - x0;
+		int deltay = Math.abs(y1 - y0);
+		double error = 0;
+		double deltaerr = (double)deltay / (double)deltax;
+		int ystep;
+		int y = y0;
+		ystep = (y0 < y1) ? 1 : -1;
+		
+		for (int x = x0; x <= x1; x++)
+		{
+			if (steep)
+			{
+				canvas.setRGB(y, x, color);
+			}
+			else
+			{
+				canvas.setRGB(x, y, color);
+			}
+			error += deltaerr;
+			
+			if (error > .5)
+			{
+				y += ystep;
+				error--;
+			}
+		}
 
 
         repaint();
@@ -72,7 +117,34 @@ public class TurtleCanvas extends JPanel {
     public void drawArc() {
     	// Should implement: http://en.wikipedia.org/wiki/Midpoint_circle_algorithm
     }
+    
+    public void floodFill(int x, int y) {
+		int emptyColor = canvas.getRGB(x, y);
+		
+		floodFillR(x, y, emptyColor);
+	}
+	
+	private void floodFillR(int x, int y, int emptyColor) {
+		if (x < 0 || y < 0 || x > canvas.getWidth() - 1 || y > canvas.getWidth() - 1) return;
+		
+		if (canvas.getRGB(x, y) != emptyColor) return;
+		
+		canvas.setRGB(x, y, penColor.getRGB());
+		
+		floodFillR(x-1, y, emptyColor);
+		floodFillR(x, y-1, emptyColor);
+		floodFillR(x+1, y, emptyColor);
+		floodFillR(x, y+1, emptyColor);
+	}
+    
+    public void setBackgroundColor(Color _bgColor) {
+		bgColor = _bgColor;
+		
+		repaint();
+	}
 
-
+	public void setPenColor(Color _penColor) {
+		penColor = _penColor;
+	}
 
 }
