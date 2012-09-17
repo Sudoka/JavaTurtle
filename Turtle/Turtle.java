@@ -20,17 +20,33 @@ public class Turtle extends JFrame implements ComponentListener {
 	private Stack <TurtleState> states;
 	private TurtleCanvas canvas;
 
-	public Turtle(String title, int width, int height) {
+	// debug stuff:
+	protected boolean debug;
+	private Vector <String> debugStates;
+
+	public void printDebug() {
+		for(String s : debugStates) {
+			System.out.println(s);
+		}
+	}
+
+	public Turtle(String title, int width, int height, boolean dbg) {
 		super(title);
 
 		canvas = new TurtleCanvas(width, height);
+		debugStates = new Vector <String> ();
 		states = new Stack <TurtleState> ();
-		states.push(new TurtleState());
+		states.push(new TurtleState(width/2, height/2, 0));
+		debug = dbg;
 
 		this.setSize(width, height);
 		this.add(canvas);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	public Turtle(String title, int width, int height) {
+		this(title, width, height, false);
 	}
 
 	private class TurtleState {
@@ -46,28 +62,20 @@ public class Turtle extends JFrame implements ComponentListener {
 		protected WindowMode winMode;
 
 		public TurtleState() {
-			x = y = 0;
-			heading  = 0;
+			this(0, 0, 0);
+		}
+
+		public TurtleState(int x_, int y_, float head)
+		{
+			x = x_;
+			y = y_;
+			heading  = head;
 			bgColor  = Color.black;
 			penColor = Color.white;
 			penDown  = true;
 			showTurtle = true;
 			penMode = PenMode.PAINT;
 			winMode = WindowMode.WINDOW;
-		}
-
-		public TurtleState(int x_, int y_, float head, Color bg, Color pen,
-							boolean dn, boolean show, PenMode m, WindowMode w)
-		{
-			x = x_;
-			y = y_;
-			heading  = head;
-			bgColor  = bg;
-			penColor = pen;
-			penDown  = dn;
-			showTurtle = show;
-			penMode = m;
-			winMode = w;
 		}
 		public TurtleState(TurtleState old) {
 			this.x = old.x;
@@ -80,6 +88,13 @@ public class Turtle extends JFrame implements ComponentListener {
 			this.penMode = old.penMode;
 			this.winMode = old.winMode;
 		}
+
+		public String toString() {
+			String sp = "";
+			sp += ((int)heading / 100) == 0 ? " " : "";
+			sp += ((int)heading /  10) == 0 ? " " : "";
+			return "("+x+", "+y+") h: "+sp+heading+" pd: "+penDown;
+		}
 	}
 
 	//
@@ -88,9 +103,15 @@ public class Turtle extends JFrame implements ComponentListener {
 	public void push() {
 		TurtleState cur = states.peek();
 		states.push( new TurtleState(cur) );
+
+		if(debug)
+			debugStates.add( "Pushing: "+cur );
 	}
 	public void pop() {
 		states.pop();
+
+		if(debug)
+			debugStates.add("Popping to: "+states.peek());
 	}
 
 	public void clearScreen() {
@@ -127,16 +148,26 @@ public class Turtle extends JFrame implements ComponentListener {
 		x2 = x1 + (int)(dist * Math.sin(h));
 		y2 = y1 - (int)(dist * Math.cos(h));
 
-		canvas.drawLine(x1, y1, x2, y2);
+		if(cur.penDown)
+			canvas.drawLine(x1, y1, x2, y2);
 
 		cur.x = x2;
 		cur.y = y2;
+
+		if(debug)
+			debugStates.add( cur.toString() );
 	}
 	public void backward(int dist) {
 		forward(-dist);
 	}
 	public void left(float deg) {
 		TurtleState cur = states.peek();
+		cur.heading -= (deg % 360);
+		if(cur.heading < 0)
+			cur.heading += 360;
+
+		if(debug)
+			debugStates.add( cur.toString() );
 	}
 	public void right(float deg) {
 		left(-deg);
@@ -147,48 +178,86 @@ public class Turtle extends JFrame implements ComponentListener {
 	//	Turtle Manipulation
 	//
 	public void setXY(int x, int y) {
+		TurtleState cur = states.peek();
+		int x1 = cur.x;
+		int y1 = cur.y;
+		int x2 = x;
+		int y2 = y;
 
+		if(cur.penDown)
+			canvas.drawLine(x1, y1, x2, y2);
+
+		cur.x = x2;
+		cur.y = y2;
+
+		if(debug)
+			debugStates.add( cur.toString() );
 	}
 	public void setHeading(float deg) {
-
+		TurtleState cur = states.peek();
+		cur.heading = (deg % 360);
 	}
 	public void home() {
+		TurtleState cur = states.peek();
+		if(cur.penDown)
+			canvas.drawLine(cur.x, cur.y, 0, 0);
 
+		cur.x = 0;
+		cur.y = 0;
 	}
 	public void setPenDown(boolean isDown) {
-
+		TurtleState cur = states.peek();
+		cur.penDown = isDown;
 	}
 	public void setPenMode(PenMode mode) {
-
+		TurtleState cur = states.peek();
+		cur.penMode = mode;
+		canvas.mode = mode;
 	}
 	public void setPenSize(int size) {
-
+		TurtleState cur = states.peek();
 	}
 	public void setPenColor(int colorNum) {
-
+		TurtleState cur = states.peek();
+		Color c = Color.white; // colorNums.get(i);
+		cur.penColor = c;
+		canvas.penColor = c;
 	}
 	public void setPenRGB(int r, int g, int b) {
-
+		TurtleState cur = states.peek();
+		Color c = new Color(r, g, b);
+		cur.penColor = c;
+		canvas.penColor = c;
 	}
 	public void setBackgroundColor(int colorNum) {
-
+		TurtleState cur = states.peek();
+		Color c = Color.black; // colorNums.get(i);
+		cur.bgColor = c;
+		canvas.bgColor = c;
 	}
 	public void setBackgroundColor(int r, int g, int b) {
-
+		TurtleState cur = states.peek();
+		Color c = new Color(r, g, b);
+		cur.bgColor = c;
+		canvas.bgColor = c;
 	}
 
 
 	//
 	//	Other Drawing Functions
 	//
-	public void arc(int radius, float rads) {
-
+	public void arc(int radius, double rads) {
+		TurtleState cur = states.peek();
+		if(cur.penDown)
+			canvas.drawArc(cur.x, cur.y, radius, rads);
 	}
 	public void fill() {
-
+		TurtleState cur = states.peek();
+		canvas.fillFromPoint(cur.x, cur.y);
 	}
 	public void drawText(String text) {
-
+		TurtleState cur = states.peek();
+		canvas.drawText(text, cur.x, cur.y);
 	}
 
 

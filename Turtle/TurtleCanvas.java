@@ -59,6 +59,13 @@ public class TurtleCanvas extends JPanel {
         repaint();
     }
 
+    public void fillFromPoint(int x, int y) {
+
+    	// flood fill
+
+    	repaint();
+    }
+
 
     public void drawLine(int x1, int y1, int x2, int y2) {
         int color = penColor.getRGB();
@@ -69,7 +76,11 @@ public class TurtleCanvas extends JPanel {
         repaint();
     }
 
-    public void drawArc() {
+    public void drawText(String text, int x, int y) {
+    	// put some text on the bitmap
+    }
+
+    public void drawArc(int x, int y, int r, double rads) {
     	// Should implement: http://en.wikipedia.org/wiki/Midpoint_circle_algorithm
     }
 
