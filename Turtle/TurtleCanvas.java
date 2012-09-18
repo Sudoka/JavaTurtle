@@ -78,7 +78,7 @@ public class TurtleCanvas extends JPanel {
 			int temp = x0;
 			x0 = y0;
 			y0 = temp;
-			
+
 			temp = x1;
 			x1 = y1;
 			y1 = temp;
@@ -87,12 +87,12 @@ public class TurtleCanvas extends JPanel {
 			int temp = x0;
 			x0 = x1;
 			x1 = temp;
-			
+
 			temp = y0;
 			y0 = y1;
 			y1 = temp;
 		}
-		
+
 		int deltax = x1 - x0;
 		int deltay = Math.abs(y1 - y0);
 		double error = 0;
@@ -100,7 +100,7 @@ public class TurtleCanvas extends JPanel {
 		int ystep;
 		int y = y0;
 		ystep = (y0 < y1) ? 1 : -1;
-		
+
 		for (int x = x0; x <= x1; x++)
 		{
 			if (steep)
@@ -112,7 +112,7 @@ public class TurtleCanvas extends JPanel {
 				canvas.setRGB(x, y, color);
 			}
 			error += deltaerr;
-			
+
 			if (error > .5)
 			{
 				y += ystep;
@@ -128,71 +128,71 @@ public class TurtleCanvas extends JPanel {
     	// put some text on the bitmap
     }
 
-    public void drawArc(int x, int y, int radius, double radStart, double radArc) {
+    public void drawArc(int x, int y, int radius, double radArc) {
     	// Should implement: http://en.wikipedia.org/wiki/Midpoint_circle_algorithm
-    	
+
     	int f = 1 - radius;
     }
-    
-    
+
+
     public void floodFill(int x, int y) {
 		int emptyColor = canvas.getRGB(x, y);
 		int pColor = penColor.getRGB();
 		int h = canvas.getHeight();
 		int w = canvas.getWidth();
-		
+
 		boolean[][] visited = new boolean[w][h];
-		
+
 		Queue<Point> q = new LinkedList<Point>();
-		
+
 		q.add(new Point(x, y));
-		
+
 		while (!q.isEmpty())
 		{
-			Point p = q.remove();			
+			Point p = q.remove();
 			if (visited[p.x][p.y]) continue;
 			else visited[p.x][p.y] = true;
-			if (p.x >= 0 && p.y >= 0 && p.x < w && p.y < h)
+			if (p.x >= 1 && p.y >= 1 && p.x < w -1 && p.y < h -1)
 			{
 				if (canvas.getRGB(p.x, p.y) == emptyColor)
 				{
 					canvas.setRGB(p.x, p.y, pColor);
-					
+
 					//System.out.println("Painted (" + p.x + ", " + p.y + ")");
-					
+
 					if (!visited[p.x-1][p.y]) q.add(new Point(p.x-1, p.y));
 					if (!visited[p.x][p.y-1]) q.add(new Point(p.x, p.y-1));
 					if (!visited[p.x+1][p.y]) q.add(new Point(p.x+1, p.y));
 					if (!visited[p.x][p.y+1]) q.add(new Point(p.x, p.y+1));
-				} 
+				}
 			}
 		}
 	}
-    
-    
+
+
     /*
     public void floodFill(int x, int y) {
 		int emptyColor = canvas.getRGB(x, y);
-		
+
 		floodFillR(x, y, emptyColor);
 	}
-	
+
 	private void floodFillR(int x, int y, int emptyColor) {
 		if (canvas.getRGB(x, y) != emptyColor) return;
 		if (x < 0 || y < 0 || x > canvas.getWidth() - 1 || y > canvas.getWidth() - 1) return;
-		
+
 		canvas.setRGB(x, y, penColor.getRGB());
-		
+
 		floodFillR(x-1, y, emptyColor);
 		floodFillR(x+1, y, emptyColor);
 		floodFillR(x, y-1, emptyColor);
 		floodFillR(x, y+1, emptyColor);
 	}
 	*/
-    
+
     public void setBackgroundColor(Color _bgColor) {
 		bgColor = _bgColor;
-		
+
 		repaint();
 	}
 

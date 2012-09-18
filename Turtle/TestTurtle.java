@@ -74,6 +74,8 @@ public class TestTurtle
 
 	public static void main(String[] args) {
 
+		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Logo Turtle");
+
 		Turtle myTurtle = new Turtle("Hello Turtle", 500, 500, true);
 		myTurtle.setVisible(true);
 
@@ -128,5 +130,10 @@ public class TestTurtle
 		myTurtle.setPenDown(true);
 
 		drawFractal(myTurtle, 50, 40);
+
+		myTurtle.setPenDown(false);
+		myTurtle.setXY(240, 240);
+		myTurtle.setPenDown(true);
+		// myTurtle.fill();
 	}
 }

@@ -1,6 +1,9 @@
 package Turtle;
 
+import com.apple.eawt.Application;
+import javax.swing.*;
 import javax.swing.JFrame;
+import javax.swing.UIManager;
 
 import java.awt.*;
 import java.awt.event.ComponentEvent;
@@ -19,6 +22,8 @@ import java.util.*;
 public class Turtle extends JFrame implements ComponentListener {
 	private Stack <TurtleState> states;
 	private TurtleCanvas canvas;
+	private int width;
+	private int height;
 
 	// debug stuff:
 	protected boolean debug;
@@ -30,19 +35,32 @@ public class Turtle extends JFrame implements ComponentListener {
 		}
 	}
 
-	public Turtle(String title, int width, int height, boolean dbg) {
+	public Turtle(String title, int w, int h, boolean dbg) {
 		super(title);
 
-		canvas = new TurtleCanvas(width, height);
+		width = w;
+		height = h;
+		canvas = new TurtleCanvas(w, h);
 		debugStates = new Vector <String> ();
 		states = new Stack <TurtleState> ();
-		states.push(new TurtleState(width/2, height/2, 0));
+		states.push(new TurtleState(w/2, h/2, 0));
 		debug = dbg;
 
-		this.setSize(width, height);
 		this.add(canvas);
+
+		// Do other swingy things
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		// From http://stackoverflow.com/questions/3154638/setting-java-swing-application-name-on-mac
+		System.setProperty("apple.laf.useScreenMenuBar", "true");
+		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Logo Turtle");
+	}
+
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+
+		Insets dec = this.getInsets();
+		this.setSize(this.width + dec.left + dec.right, this.height + dec.top + dec.bottom);
 	}
 
 	public Turtle(String title, int width, int height) {
@@ -256,7 +274,7 @@ public class Turtle extends JFrame implements ComponentListener {
 	}
 	public void fill() {
 		TurtleState cur = states.peek();
-		canvas.fillFromPoint(cur.x, cur.y);
+		canvas.floodFill(cur.x, cur.y);
 	}
 	public void drawText(String text) {
 		TurtleState cur = states.peek();
