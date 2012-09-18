@@ -79,13 +79,13 @@ public class TestTurtle
 		Turtle myTurtle = new Turtle("Hello Turtle", 500, 500, true);
 		myTurtle.setVisible(true);
 
-		// myTurtle.tempDrawLine(400, 400, 250, 250);
-		// myTurtle.tempDrawLine(250, 250, 100, 400);
-		// myTurtle.tempDrawLine(100, 400, 400, 400);
+		myTurtle.tempDrawLine(400, 400, 250, 250);
+		myTurtle.tempDrawLine(250, 250, 100, 400);
+		myTurtle.tempDrawLine(100, 400, 400, 400);
 
-		// myTurtle.tempSetPenColor(Color.RED);
+		myTurtle.tempSetPenColor(Color.RED);
 
-		// myTurtle.tempFloodFill(250, 300);
+		myTurtle.tempFloodFill(250, 300);
 
 		for(int i = 0; i < 8; i++) {
 			double f = 0.125; double step = (2*Math.PI/3);

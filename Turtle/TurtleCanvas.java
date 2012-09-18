@@ -158,7 +158,7 @@ public class TurtleCanvas extends JPanel {
 				{
 					canvas.setRGB(p.x, p.y, pColor);
 
-					//System.out.println("Painted (" + p.x + ", " + p.y + ")");
+					System.out.println("Painted (" + p.x + ", " + p.y + ")");
 
 					if (!visited[p.x-1][p.y]) q.add(new Point(p.x-1, p.y));
 					if (!visited[p.x][p.y-1]) q.add(new Point(p.x, p.y-1));

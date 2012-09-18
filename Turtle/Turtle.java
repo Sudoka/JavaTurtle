@@ -154,6 +154,89 @@ public class Turtle extends JFrame implements ComponentListener {
 	//
 	//	Turtle Movement
 	//
+	/**
+	 *	This is where we see if any of the requested line is actually on the canvas.
+	 *	If there is a visible portion to the line then we draw it
+	 *
+	 */
+	private void drawLine(int x1, int y1, int x2, int y2) {
+		if(x1 > this.width && x2 > this.width) {
+			return ;
+		} else if(x1 < 0 && x2 < 0) {
+			return ;
+		} else if(y1 > this.height && y2 > this.height) {
+			return ;
+		} else if(y1 < 0 && y2 < 0) {
+			return ;
+		}
+
+		TurtleState cur = states.peek();
+
+		int dX = x2 - x1;
+		int dY = y2 - y1;
+		double m = Double.NaN;
+		if(dX != 0) {
+			m = dY / dX;
+		}
+
+
+		if(x1 > this.width) {
+			if(Double.isNaN(m))
+				return ;
+			while(x1 > this.width) {
+				x1 -= 1;
+				y1 -= m;
+			}
+			if(y1 < 0 || y1 > this.height)
+				return ;
+		} else if(x1 < 0) {
+			if(Double.isNaN(m))
+				return ;
+			while(x1 < 0) {
+				x1 += 1;
+				y1 += m;
+			}
+			if(y1 < 0 || y1 > this.height)
+				return ;
+		}
+
+		if(x2 > this.width) {
+			if(Double.isNaN(m))
+				return ;
+			while(x2 > this.width) {
+				x2 -= 1;
+				y2 -= m;
+			}
+		} else if(x2 < 0) {
+			while(x2 < 0) {
+				x2 += 1;
+				y2 += m;
+			}
+		}
+
+		if(y2 > this.height) {
+			if(m == 0) {
+				y2 = this.height;
+			} else {
+				while(y2 > this.height) {
+					y2 -= m;
+					x2 -= 1;
+				}
+			}
+		} else if(y2 < 0) {
+			if(m == 0) {
+				y2 = 0;
+			} else {
+				while(y2 < 0) {
+					y2 += m;
+					x2 += 1;
+				}
+			}
+		}
+
+		if(cur.penDown)
+			canvas.drawLine(x1, y1, x2, y2);
+	}
 	public void forward(int dist) {
 		TurtleState cur = states.peek();
 
@@ -168,6 +251,7 @@ public class Turtle extends JFrame implements ComponentListener {
 
 		if(cur.penDown)
 			canvas.drawLine(x1, y1, x2, y2);
+		// this.drawLine(x1, y1, x2, y2);
 
 		cur.x = x2;
 		cur.y = y2;
@@ -207,6 +291,7 @@ public class Turtle extends JFrame implements ComponentListener {
 
 		if(cur.penDown)
 			canvas.drawLine(x1, y1, x2, y2);
+		// this.drawLine(x1, y1, x2, y2);
 
 		cur.x = x2;
 		cur.y = y2;
