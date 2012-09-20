@@ -71,8 +71,6 @@ public class TurtleCanvas extends JPanel {
 
 
     public void drawLine(int x0, int y0, int x1, int y1) {
-        int color = penColor.getRGB();
-
         boolean steep = Math.abs(y1 - y0) > Math.abs(x1 - x0);
         if (steep) {
 			int temp = x0;
@@ -105,11 +103,11 @@ public class TurtleCanvas extends JPanel {
 		{
 			if (steep)
 			{
-				canvas.setRGB(y, x, color);
+				drawPoint(y, x);
 			}
 			else
 			{
-				canvas.setRGB(x, y, color);
+				drawPoint(x, y);
 			}
 			error += deltaerr;
 
@@ -128,16 +126,28 @@ public class TurtleCanvas extends JPanel {
     	// put some text on the bitmap
     }
 
-    public void drawArc(int x, int y, int radius, double radArc) {
-    	// Should implement: http://en.wikipedia.org/wiki/Midpoint_circle_algorithm
-
-    	int f = 1 - radius;
+    public void drawArc(int cx, int cy, int r, double radStart, double radArc) {
+        int arclen = (int)(r * radArc);
+        int resolution = 2*arclen;
+        int x, y;
+        
+        // Draw the arc points
+        for (int i = 0; i <= resolution; i++)
+        {
+            double radCur = ((double)i / (double)resolution) * radArc + radStart;
+            x = (int)Math.round(r * Math.cos(radCur) + cx);
+            y = (int)Math.round(r * Math.sin(radCur) + cy);
+            
+            drawPoint(x, y);
+        }
+        
+        repaint();
     }
 
 
     public void floodFill(int x, int y) {
 		int emptyColor = canvas.getRGB(x, y);
-		int pColor = penColor.getRGB();
+		//int pColor = penColor.getRGB();
 		int h = canvas.getHeight();
 		int w = canvas.getWidth();
 
@@ -156,9 +166,7 @@ public class TurtleCanvas extends JPanel {
 			{
 				if (canvas.getRGB(p.x, p.y) == emptyColor)
 				{
-					canvas.setRGB(p.x, p.y, pColor);
-
-					System.out.println("Painted (" + p.x + ", " + p.y + ")");
+					drawPoint(p.x, p.y);
 
 					if (!visited[p.x-1][p.y]) q.add(new Point(p.x-1, p.y));
 					if (!visited[p.x][p.y-1]) q.add(new Point(p.x, p.y-1));
@@ -167,28 +175,9 @@ public class TurtleCanvas extends JPanel {
 				}
 			}
 		}
+		
+		repaint();
 	}
-
-
-    /*
-    public void floodFill(int x, int y) {
-		int emptyColor = canvas.getRGB(x, y);
-
-		floodFillR(x, y, emptyColor);
-	}
-
-	private void floodFillR(int x, int y, int emptyColor) {
-		if (canvas.getRGB(x, y) != emptyColor) return;
-		if (x < 0 || y < 0 || x > canvas.getWidth() - 1 || y > canvas.getWidth() - 1) return;
-
-		canvas.setRGB(x, y, penColor.getRGB());
-
-		floodFillR(x-1, y, emptyColor);
-		floodFillR(x+1, y, emptyColor);
-		floodFillR(x, y-1, emptyColor);
-		floodFillR(x, y+1, emptyColor);
-	}
-	*/
 
     public void setBackgroundColor(Color _bgColor) {
 		bgColor = _bgColor;
@@ -199,5 +188,15 @@ public class TurtleCanvas extends JPanel {
 	public void setPenColor(Color _penColor) {
 		penColor = _penColor;
 	}
-
+    
+    private void drawPoint(int x, int y) {
+        if (x < 0 || y < 0 || x >= canvas.getHeight() || y >= canvas.getHeight()) return;
+        else
+        {
+            // Switch this line based on pen mode
+            int color = penColor.getRGB();
+            
+            canvas.setRGB(x, y, color);
+        }
+    }
 }

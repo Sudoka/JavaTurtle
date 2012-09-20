@@ -78,7 +78,7 @@ public class TestTurtle
 
 		Turtle myTurtle = new Turtle("Hello Turtle", 500, 500, true);
 		myTurtle.setVisible(true);
-
+        
 		myTurtle.tempDrawLine(400, 400, 250, 250);
 		myTurtle.tempDrawLine(250, 250, 100, 400);
 		myTurtle.tempDrawLine(100, 400, 400, 400);
@@ -135,5 +135,12 @@ public class TestTurtle
 		myTurtle.setXY(240, 240);
 		myTurtle.setPenDown(true);
 		// myTurtle.fill();
+        
+        myTurtle.setPenDown(false);
+        myTurtle.setXY(0, 0);
+        myTurtle.setPenDown(true);
+        myTurtle.tempSetPenColor(Color.WHITE);
+        myTurtle.setHeading(-135);
+        myTurtle.tempDrawArc(225, 90);
 	}
 }

@@ -1,6 +1,6 @@
 package Turtle;
 
-import com.apple.eawt.Application;
+//import com.apple.eawt.Application;
 import javax.swing.*;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -355,7 +355,7 @@ public class Turtle extends JFrame implements ComponentListener {
 	public void arc(int radius, double rads) {
 		TurtleState cur = states.peek();
 		if(cur.penDown)
-			canvas.drawArc(cur.x, cur.y, radius, rads);
+			canvas.drawArc(cur.x, cur.y, radius, Math.toRadians(cur.heading), rads);
 	}
 	public void fill() {
 		TurtleState cur = states.peek();
@@ -396,6 +396,12 @@ public class Turtle extends JFrame implements ComponentListener {
 	public void tempDrawLine(int x0, int y0, int x1, int y1) {
 		canvas.drawLine(x0, y0, x1, y1);
 	}
+    
+    public void tempDrawArc(int r, double degArc) {
+        TurtleState cur = states.peek();
+        
+        canvas.drawArc(cur.x, cur.y, r, Math.toRadians(cur.heading), Math.toRadians(degArc));
+    }
 
 	public void tempFloodFill(int x, int y) {
 		canvas.floodFill(x, y);
