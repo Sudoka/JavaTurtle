@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 public class TurtleCanvas extends JPanel {
 
     private BufferedImage canvas;
+    private Graphics2D graphicsContext;
 
     protected Color penColor;
     protected Color bgColor;
@@ -32,6 +33,7 @@ public class TurtleCanvas extends JPanel {
 
     public TurtleCanvas(int width, int height) {
         canvas = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        graphicsContext = canvas.createGraphics();
 
         mode = PenMode.PAINT;
         bgColor  = Color.black;
@@ -70,7 +72,7 @@ public class TurtleCanvas extends JPanel {
     }
 
 
-    public void drawLine(int x0, int y0, int x1, int y1) {
+    /*public void drawLine(int x0, int y0, int x1, int y1) {
         boolean steep = Math.abs(y1 - y0) > Math.abs(x1 - x0);
         if (steep) {
 			int temp = x0;
@@ -120,12 +122,16 @@ public class TurtleCanvas extends JPanel {
 
 
         repaint();
+    }*/
+    
+    public void drawLine(int x0, int y0, int x1, int y1) {        
+        graphicsContext.drawLine(x0, y0, x1, y1);
+        
+        repaint();
     }
 
     public void drawText(String text, int x, int y) {
-    	Graphics2D g = canvas.createGraphics();
-        
-        g.drawString(text, x, y);
+        graphicsContext.drawString(text, x, y);
         
         repaint();
     }
@@ -190,6 +196,7 @@ public class TurtleCanvas extends JPanel {
 
 	public void setPenColor(Color _penColor) {
 		penColor = _penColor;
+        graphicsContext.setColor(new Color(penColor.getRGB()));
 	}
     
     private void drawPoint(int x, int y) {

@@ -1,3 +1,15 @@
+// Need a pen object that is shared between Turtle and TurtleCanvas.
+// Not sure what will need to be done for state information for the pen
+// color/mode/width, but you understand your state stack implementation 
+// better than I do.  
+
+// Implemented drawText to use the Graphics2D, and reimplemented 
+// drawLine to also use it.  Haven't worked on the arc at all yet,
+// since Java's drawArc is idiotic, as mentioned.
+
+// Stroke is kinda confusing but I'll figure it out soon.  
+
+
 package Turtle;
 
 //import com.apple.eawt.Application;
