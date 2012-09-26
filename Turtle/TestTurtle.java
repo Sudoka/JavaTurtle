@@ -141,6 +141,12 @@ public class TestTurtle
         myTurtle.setPenDown(true);
         myTurtle.tempSetPenColor(Color.WHITE);
         myTurtle.setHeading(-135);
-        myTurtle.tempDrawArc(225, 90);
+        myTurtle.tempDrawArc(225, 135);
+        
+        myTurtle.setPenDown(false);
+        myTurtle.setXY(0, 100);
+        myTurtle.tempSetPenColor(Color.BLACK);
+        myTurtle.setPenDown(true);
+        myTurtle.label("Failure!");
 	}
 }

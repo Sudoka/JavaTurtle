@@ -123,7 +123,11 @@ public class TurtleCanvas extends JPanel {
     }
 
     public void drawText(String text, int x, int y) {
-    	// put some text on the bitmap
+    	Graphics2D g = canvas.createGraphics();
+        
+        g.drawString(text, x, y);
+        
+        repaint();
     }
 
     public void drawArc(int cx, int cy, int r, double radStart, double radArc) {
@@ -143,7 +147,6 @@ public class TurtleCanvas extends JPanel {
         
         repaint();
     }
-
 
     public void floodFill(int x, int y) {
 		int emptyColor = canvas.getRGB(x, y);

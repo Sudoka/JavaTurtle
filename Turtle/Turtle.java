@@ -361,7 +361,7 @@ public class Turtle extends JFrame implements ComponentListener {
 		TurtleState cur = states.peek();
 		canvas.floodFill(cur.x, cur.y);
 	}
-	public void drawText(String text) {
+	public void label(String text) {
 		TurtleState cur = states.peek();
 		canvas.drawText(text, cur.x, cur.y);
 	}
