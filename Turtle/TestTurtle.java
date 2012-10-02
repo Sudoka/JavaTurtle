@@ -94,46 +94,60 @@ public class TestTurtle
 		   	int blue  = (int)(Math.sin(f*i*4 + 2*step) * 127) + 128;
 			myTurtle.setPenRGB(red, green, blue);
 
-			drawFractal(myTurtle, 80, 25);
+			if(i < 3 || i >= 6)
+				drawFractal(myTurtle, 80, 25);
 			myTurtle.right(45);
 		}
 
 
-		myTurtle.setPenDown(false);
-		myTurtle.setPenRGB(102, 205, 170);
-		myTurtle.setXY(20, 20);
-		myTurtle.setPenDown(true);
+		// myTurtle.setPenDown(false);
+		// myTurtle.setPenRGB(102, 205, 170);
+		// myTurtle.setXY(20, 20);
+		// myTurtle.setPenDown(true);
 
-		drawFractal(myTurtle, 50, 40);
+		// drawFractal(myTurtle, 50, 40);
 
 
-		myTurtle.setPenRGB(154, 192, 205);
-		myTurtle.setPenDown(false);
-		myTurtle.setXY(-20, -20);
-		myTurtle.setHeading(180);
-		myTurtle.setPenDown(true);
+		// myTurtle.setPenRGB(154, 192, 205);
+		// myTurtle.setPenDown(false);
+		// myTurtle.setXY(-20, -20);
+		// myTurtle.setHeading(180);
+		// myTurtle.setPenDown(true);
 
-		drawFractal(myTurtle, 50, 40);
+		// drawFractal(myTurtle, 50, 40);
 
-		myTurtle.setPenRGB(238, 154, 73);
-		myTurtle.setPenDown(false);
-		myTurtle.setXY(-20, 20);
-		myTurtle.setHeading(90);
-		myTurtle.setPenDown(true);
+		// myTurtle.setPenRGB(238, 154, 73);
+		// myTurtle.setPenDown(false);
+		// myTurtle.setXY(-20, 20);
+		// myTurtle.setHeading(90);
+		// myTurtle.setPenDown(true);
 
-		drawFractal(myTurtle, 50, 40);
+		// drawFractal(myTurtle, 50, 40);
 
-		myTurtle.setPenRGB(191, 62, 255);
-		myTurtle.setPenDown(false);
-		myTurtle.setXY(20, -20);
-		myTurtle.setHeading(270);
-		myTurtle.setPenDown(true);
+		// myTurtle.setPenRGB(191, 62, 255);
+		// myTurtle.setPenDown(false);
+		// myTurtle.setXY(20, -20);
+		// myTurtle.setHeading(270);
+		// myTurtle.setPenDown(true);
 
-		drawFractal(myTurtle, 50, 40);
+		// drawFractal(myTurtle, 50, 40);
 
 		myTurtle.setPenDown(false);
 		myTurtle.setXY(240, 240);
 		myTurtle.setPenDown(true);
 		// myTurtle.fill();
+
+        myTurtle.setPenDown(false);
+        myTurtle.setXY(0, 0);
+        myTurtle.setPenDown(true);
+        // myTurtle.tempSetPenColor(Color.WHITE);
+        myTurtle.setPenRGB(255, 255, 255);
+        myTurtle.setHeading(-135);
+        myTurtle.arc(225, 135);
+
+        myTurtle.setPenDown(false);
+        myTurtle.setXY(0, 100);
+        myTurtle.setPenDown(true);
+        myTurtle.label("Failure!");
 	}
 }

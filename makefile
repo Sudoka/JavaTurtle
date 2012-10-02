@@ -1,5 +1,5 @@
 JC = javac
-JR = java -Xdock:name=Logo\ Turtle -Xdock:icon=turtle.png
+JR = java -Xdock:icon=turtle.png
 
 default:
 	$(JC) Turtle/TestTurtle.java Turtle/Turtle.java

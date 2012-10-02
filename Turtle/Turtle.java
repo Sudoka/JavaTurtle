@@ -1,6 +1,18 @@
+// Need a pen object that is shared between Turtle and TurtleCanvas.
+// Not sure what will need to be done for state information for the pen
+// color/mode/width, but you understand your state stack implementation
+// better than I do.
+
+// Implemented drawText to use the Graphics2D, and reimplemented
+// drawLine to also use it.  Haven't worked on the arc at all yet,
+// since Java's drawArc is idiotic, as mentioned.
+
+// Stroke is kinda confusing but I'll figure it out soon.
+
+
 package Turtle;
 
-import com.apple.eawt.Application;
+//import com.apple.eawt.Application;
 import javax.swing.*;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -67,16 +79,32 @@ public class Turtle extends JFrame implements ComponentListener {
 		this(title, width, height, false);
 	}
 
+	protected class PenState {
+		protected Color bgColor;
+		protected Color penColor;
+		protected boolean penDown;
+		protected PenMode penMode;
+		protected boolean showTurtle;
+
+		public PenState() {
+			this(Color.black, Color.white, true, false, PenMode.PAINT);
+		}
+
+		public PenState(Color p, Color b, boolean dn, boolean st, PenMode mode) {
+			this.bgColor = b;
+			this.penColor = p;
+			this.penDown = dn;
+			this.showTurtle = st;
+			this.penMode = mode;
+		}
+	}
+
 	private class TurtleState {
 		protected int x;
 		protected int y;
 		protected double heading;
-		protected Color bgColor;
-		protected Color penColor;
-		protected boolean penDown;
-		protected boolean isRadians;
-		protected boolean showTurtle;
-		protected PenMode penMode;
+
+		protected PenState pen;
 		protected WindowMode winMode;
 
 		public TurtleState() {
@@ -88,22 +116,14 @@ public class Turtle extends JFrame implements ComponentListener {
 			x = x_;
 			y = y_;
 			heading  = head;
-			bgColor  = Color.black;
-			penColor = Color.white;
-			penDown  = true;
-			showTurtle = true;
-			penMode = PenMode.PAINT;
+			pen = new PenState();
 			winMode = WindowMode.WINDOW;
 		}
 		public TurtleState(TurtleState old) {
 			this.x = old.x;
 			this.y = old.y;
 			this.heading  = old.heading;
-			this.bgColor  = old.bgColor;
-			this.penColor = old.penColor;
-			this.penDown  = old.penDown;
-			this.showTurtle = old.showTurtle;
-			this.penMode = old.penMode;
+			this.pen = old.pen;
 			this.winMode = old.winMode;
 		}
 
@@ -111,7 +131,7 @@ public class Turtle extends JFrame implements ComponentListener {
 			String sp = "";
 			sp += ((int)heading / 100) == 0 ? " " : "";
 			sp += ((int)heading /  10) == 0 ? " " : "";
-			return "("+x+", "+y+") h: "+sp+heading+" pd: "+penDown;
+			return "("+x+", "+y+") h: "+sp+heading+" pd: "+pen.penDown;
 		}
 	}
 
@@ -140,7 +160,7 @@ public class Turtle extends JFrame implements ComponentListener {
 	}
 	public void showTurtle(boolean show) {
 		TurtleState cur = states.peek();
-		cur.showTurtle = show;
+		cur.pen.showTurtle = show;
 	}
 	public void setTurtleMode(WindowMode mode) {
 		TurtleState cur = states.peek();
@@ -154,89 +174,6 @@ public class Turtle extends JFrame implements ComponentListener {
 	//
 	//	Turtle Movement
 	//
-	/**
-	 *	This is where we see if any of the requested line is actually on the canvas.
-	 *	If there is a visible portion to the line then we draw it
-	 *
-	 */
-	private void drawLine(int x1, int y1, int x2, int y2) {
-		if(x1 > this.width && x2 > this.width) {
-			return ;
-		} else if(x1 < 0 && x2 < 0) {
-			return ;
-		} else if(y1 > this.height && y2 > this.height) {
-			return ;
-		} else if(y1 < 0 && y2 < 0) {
-			return ;
-		}
-
-		TurtleState cur = states.peek();
-
-		int dX = x2 - x1;
-		int dY = y2 - y1;
-		double m = Double.NaN;
-		if(dX != 0) {
-			m = dY / dX;
-		}
-
-
-		if(x1 > this.width) {
-			if(Double.isNaN(m))
-				return ;
-			while(x1 > this.width) {
-				x1 -= 1;
-				y1 -= m;
-			}
-			if(y1 < 0 || y1 > this.height)
-				return ;
-		} else if(x1 < 0) {
-			if(Double.isNaN(m))
-				return ;
-			while(x1 < 0) {
-				x1 += 1;
-				y1 += m;
-			}
-			if(y1 < 0 || y1 > this.height)
-				return ;
-		}
-
-		if(x2 > this.width) {
-			if(Double.isNaN(m))
-				return ;
-			while(x2 > this.width) {
-				x2 -= 1;
-				y2 -= m;
-			}
-		} else if(x2 < 0) {
-			while(x2 < 0) {
-				x2 += 1;
-				y2 += m;
-			}
-		}
-
-		if(y2 > this.height) {
-			if(m == 0) {
-				y2 = this.height;
-			} else {
-				while(y2 > this.height) {
-					y2 -= m;
-					x2 -= 1;
-				}
-			}
-		} else if(y2 < 0) {
-			if(m == 0) {
-				y2 = 0;
-			} else {
-				while(y2 < 0) {
-					y2 += m;
-					x2 += 1;
-				}
-			}
-		}
-
-		if(cur.penDown)
-			canvas.drawLine(x1, y1, x2, y2);
-	}
 	public void forward(int dist) {
 		TurtleState cur = states.peek();
 
@@ -249,9 +186,8 @@ public class Turtle extends JFrame implements ComponentListener {
 		x2 = x1 + (int)(dist * Math.sin(h));
 		y2 = y1 - (int)(dist * Math.cos(h));
 
-		if(cur.penDown)
+		if(cur.pen.penDown)
 			canvas.drawLine(x1, y1, x2, y2);
-		// this.drawLine(x1, y1, x2, y2);
 
 		cur.x = x2;
 		cur.y = y2;
@@ -284,14 +220,10 @@ public class Turtle extends JFrame implements ComponentListener {
 		int x1 = cur.x;
 		int y1 = cur.y;
 		int x2 = (canvas.getWidth() /2) + x;
-		int y2 = (canvas.getHeight()/2) + y;
+		int y2 = (canvas.getHeight()/2) - y;
 
-		// System.out.println(x+" "+y+" "+canvas.getWidth()+" "+canvas.getHeight());
-		// System.out.println(x1+" "+y1+" "+x2+" "+y2);
-
-		if(cur.penDown)
+		if(cur.pen.penDown)
 			canvas.drawLine(x1, y1, x2, y2);
-		// this.drawLine(x1, y1, x2, y2);
 
 		cur.x = x2;
 		cur.y = y2;
@@ -301,51 +233,63 @@ public class Turtle extends JFrame implements ComponentListener {
 	}
 	public void setHeading(float deg) {
 		TurtleState cur = states.peek();
-		cur.heading = (deg % 360);
+		deg += 90;
+		deg %= 360;
+		deg = -deg;
+
+		cur.heading = deg;
 	}
 	public void home() {
 		TurtleState cur = states.peek();
-		if(cur.penDown)
+		if(cur.pen.penDown)
 			canvas.drawLine(cur.x, cur.y, 0, 0);
 
 		cur.x = 0;
 		cur.y = 0;
 	}
+
+
 	public void setPenDown(boolean isDown) {
 		TurtleState cur = states.peek();
-		cur.penDown = isDown;
+		cur.pen.penDown = isDown;
 	}
 	public void setPenMode(PenMode mode) {
 		TurtleState cur = states.peek();
-		cur.penMode = mode;
+		cur.pen.penMode = mode;
 		canvas.mode = mode;
 	}
 	public void setPenSize(int size) {
 		TurtleState cur = states.peek();
 	}
+
 	public void setPenColor(int colorNum) {
 		TurtleState cur = states.peek();
 		Color c = Color.white; // colorNums.get(i);
-		cur.penColor = c;
-		canvas.penColor = c;
+
+		cur.pen.penColor = c;
+		canvas.setPenColor(c);
 	}
 	public void setPenRGB(int r, int g, int b) {
 		TurtleState cur = states.peek();
 		Color c = new Color(r, g, b);
-		cur.penColor = c;
-		canvas.penColor = c;
+
+		cur.pen.penColor = c;
+		canvas.setPenColor(c);
 	}
+
 	public void setBackgroundColor(int colorNum) {
 		TurtleState cur = states.peek();
 		Color c = Color.black; // colorNums.get(i);
-		cur.bgColor = c;
-		canvas.bgColor = c;
+
+		cur.pen.bgColor = c;
+		canvas.setBackgroundColor(c);
 	}
 	public void setBackgroundColor(int r, int g, int b) {
 		TurtleState cur = states.peek();
 		Color c = new Color(r, g, b);
-		cur.bgColor = c;
-		canvas.bgColor = c;
+
+		cur.pen.bgColor = c;
+		canvas.setBackgroundColor(c);
 	}
 
 
@@ -354,14 +298,14 @@ public class Turtle extends JFrame implements ComponentListener {
 	//
 	public void arc(int radius, double rads) {
 		TurtleState cur = states.peek();
-		if(cur.penDown)
-			canvas.drawArc(cur.x, cur.y, radius, rads);
+		if(cur.pen.penDown)
+			canvas.drawArc(cur.x, cur.y, radius, Math.toRadians(cur.heading), rads);
 	}
 	public void fill() {
 		TurtleState cur = states.peek();
 		canvas.floodFill(cur.x, cur.y);
 	}
-	public void drawText(String text) {
+	public void label(String text) {
 		TurtleState cur = states.peek();
 		canvas.drawText(text, cur.x, cur.y);
 	}
@@ -396,6 +340,12 @@ public class Turtle extends JFrame implements ComponentListener {
 	public void tempDrawLine(int x0, int y0, int x1, int y1) {
 		canvas.drawLine(x0, y0, x1, y1);
 	}
+
+    public void tempDrawArc(int r, double degArc) {
+        TurtleState cur = states.peek();
+
+        canvas.drawArc(cur.x, cur.y, r, Math.toRadians(cur.heading), Math.toRadians(degArc));
+    }
 
 	public void tempFloodFill(int x, int y) {
 		canvas.floodFill(x, y);
