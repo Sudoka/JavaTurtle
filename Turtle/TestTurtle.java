@@ -142,12 +142,19 @@ public class TestTurtle
         myTurtle.setPenDown(true);
         // myTurtle.tempSetPenColor(Color.WHITE);
         myTurtle.setPenRGB(255, 255, 255);
-        myTurtle.setHeading(-135);
-        myTurtle.arc(225, 135);
+        myTurtle.setPenSize(5);
+        myTurtle.setHeading(-45);
+        myTurtle.arc(225, 90);
+        
+        myTurtle.setPenMode(PenMode.ERASE);
+        myTurtle.setHeading(-15);
+        myTurtle.arc(225, 30);
+        
+        myTurtle.setPenMode(PenMode.PAINT);
 
         myTurtle.setPenDown(false);
         myTurtle.setXY(0, 100);
         myTurtle.setPenDown(true);
-        myTurtle.label("Failure!");
+        myTurtle.label("Text!");
 	}
 }

@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.Point;
+import java.awt.BasicStroke;
 import java.util.Queue;
 import java.util.LinkedList;
 
@@ -25,9 +26,10 @@ public class TurtleCanvas extends JPanel {
     private BufferedImage canvas;
     private Graphics2D graphicsContext;
 
-    protected Color penColor;
-    protected Color bgColor;
-    protected PenMode mode;
+    private Color penColor;
+    private Color bgColor;
+    private PenMode penMode;
+    private int penWidth;
     protected boolean showTurtle;
 
 
@@ -35,7 +37,7 @@ public class TurtleCanvas extends JPanel {
         canvas = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         graphicsContext = canvas.createGraphics();
 
-        mode = PenMode.PAINT;
+        penMode = PenMode.PAINT;
         bgColor  = Color.black;
         penColor = Color.white;
         showTurtle = true;
@@ -63,14 +65,6 @@ public class TurtleCanvas extends JPanel {
         }
         repaint();
     }
-
-    public void fillFromPoint(int x, int y) {
-
-    	// flood fill
-
-    	repaint();
-    }
-
 
     /*public void drawLine(int x0, int y0, int x1, int y1) {
         boolean steep = Math.abs(y1 - y0) > Math.abs(x1 - x0);
@@ -125,18 +119,36 @@ public class TurtleCanvas extends JPanel {
     }*/
 
     public void drawLine(int x0, int y0, int x1, int y1) {
+        if (this.penMode == PenMode.ERASE)
+        {
+            graphicsContext.setColor(this.bgColor);
+        }
+        else
+        {
+            graphicsContext.setColor(this.penColor);
+        }
+        
         graphicsContext.drawLine(x0, y0, x1, y1);
 
         repaint();
     }
 
     public void drawText(String text, int x, int y) {
+        if (this.penMode == PenMode.ERASE)
+        {
+            graphicsContext.setColor(this.bgColor);
+        }
+        else
+        {
+            graphicsContext.setColor(this.penColor);
+        }
+        
         graphicsContext.drawString(text, x, y);
 
         repaint();
     }
 
-    public void drawArc(int cx, int cy, int r, double radStart, double radArc) {
+    /*public void drawArc(int cx, int cy, int r, double radStart, double radArc) {
         int arclen = (int)(r * radArc);
         int resolution = 2*arclen;
         int x, y;
@@ -151,6 +163,27 @@ public class TurtleCanvas extends JPanel {
             drawPoint(x, y);
         }
 
+        repaint();
+    }*/
+    
+    public void drawArc(int cx, int cy, int r, double degStart, double degArc) {
+        if (this.penMode == PenMode.ERASE)
+        {
+            graphicsContext.setColor(this.bgColor);
+        }
+        else
+        {
+            graphicsContext.setColor(this.penColor);
+        }
+        
+        int x, y, width, height;
+        
+        x = cx - r;
+        y = cy - r;
+        width = height = 2 * r;
+        
+        graphicsContext.drawArc(x, y, width, height, (int)degStart, (int)degArc);
+        
         repaint();
     }
 
@@ -188,7 +221,7 @@ public class TurtleCanvas extends JPanel {
 		repaint();
 	}
 
-    public void setBackgroundColor(Color _bgColor) {
+    /*public void setBackgroundColor(Color _bgColor) {
 		bgColor = _bgColor;
 
 		repaint();
@@ -197,7 +230,19 @@ public class TurtleCanvas extends JPanel {
 	public void setPenColor(Color _penColor) {
 		penColor = _penColor;
         graphicsContext.setColor(new Color(penColor.getRGB()));
-	}
+	}*/
+    
+    public void updatePen(Color _bgColor, Color _penColor, PenMode _penMode, int _penWidth, boolean bgChange) {
+        this.bgColor = _bgColor;
+        this.penColor = _penColor;
+        this.penMode = _penMode;
+        this.penWidth = _penWidth;
+        
+        graphicsContext.setColor(penColor);
+        graphicsContext.setStroke(new BasicStroke( (float)penWidth ));
+        
+        if (bgChange) repaint();
+    }
 
     private void drawPoint(int x, int y) {
         if (x < 0 || y < 0 || x >= canvas.getHeight() || y >= canvas.getHeight()) return;

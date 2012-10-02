@@ -79,26 +79,6 @@ public class Turtle extends JFrame implements ComponentListener {
 		this(title, width, height, false);
 	}
 
-	protected class PenState {
-		protected Color bgColor;
-		protected Color penColor;
-		protected boolean penDown;
-		protected PenMode penMode;
-		protected boolean showTurtle;
-
-		public PenState() {
-			this(Color.black, Color.white, true, false, PenMode.PAINT);
-		}
-
-		public PenState(Color p, Color b, boolean dn, boolean st, PenMode mode) {
-			this.bgColor = b;
-			this.penColor = p;
-			this.penDown = dn;
-			this.showTurtle = st;
-			this.penMode = mode;
-		}
-	}
-
 	private class TurtleState {
 		protected int x;
 		protected int y;
@@ -134,6 +114,28 @@ public class Turtle extends JFrame implements ComponentListener {
 			return "("+x+", "+y+") h: "+sp+heading+" pd: "+pen.penDown;
 		}
 	}
+    
+    protected class PenState {
+        protected Color bgColor;
+        protected Color penColor;
+        protected boolean penDown;
+        protected PenMode penMode;
+        protected boolean showTurtle;
+        protected int     penWidth;
+
+        public PenState() {
+            this(Color.black, Color.white, true, false, PenMode.PAINT, 1);
+        }
+
+        public PenState(Color b, Color p, boolean dn, boolean st, PenMode mode, int width) {
+            this.bgColor = b;
+            this.penColor = p;
+            this.penDown = dn;
+            this.showTurtle = st;
+            this.penMode = mode;
+            this.penWidth = width;
+        }
+    }
 
 	//
 	//	Context Manipulation
@@ -233,9 +235,10 @@ public class Turtle extends JFrame implements ComponentListener {
 	}
 	public void setHeading(float deg) {
 		TurtleState cur = states.peek();
-		deg += 90;
-		deg %= 360;
-		deg = -deg;
+		
+        deg += 270;
+        deg %= 360;
+        deg = -deg;
 
 		cur.heading = deg;
 	}
@@ -252,14 +255,20 @@ public class Turtle extends JFrame implements ComponentListener {
 	public void setPenDown(boolean isDown) {
 		TurtleState cur = states.peek();
 		cur.pen.penDown = isDown;
+        
+        canvas.updatePen(cur.pen.bgColor, cur.pen.penColor, cur.pen.penMode, cur.pen.penWidth, false);
 	}
 	public void setPenMode(PenMode mode) {
 		TurtleState cur = states.peek();
 		cur.pen.penMode = mode;
-		canvas.mode = mode;
+        
+		canvas.updatePen(cur.pen.bgColor, cur.pen.penColor, cur.pen.penMode, cur.pen.penWidth, false);
 	}
 	public void setPenSize(int size) {
 		TurtleState cur = states.peek();
+        cur.pen.penWidth = size;
+        
+        canvas.updatePen(cur.pen.bgColor, cur.pen.penColor, cur.pen.penMode, cur.pen.penWidth, false);
 	}
 
 	public void setPenColor(int colorNum) {
@@ -267,14 +276,14 @@ public class Turtle extends JFrame implements ComponentListener {
 		Color c = Color.white; // colorNums.get(i);
 
 		cur.pen.penColor = c;
-		canvas.setPenColor(c);
+		canvas.updatePen(cur.pen.bgColor, cur.pen.penColor, cur.pen.penMode, cur.pen.penWidth, false);
 	}
 	public void setPenRGB(int r, int g, int b) {
 		TurtleState cur = states.peek();
 		Color c = new Color(r, g, b);
 
 		cur.pen.penColor = c;
-		canvas.setPenColor(c);
+		canvas.updatePen(cur.pen.bgColor, cur.pen.penColor, cur.pen.penMode, cur.pen.penWidth, false);
 	}
 
 	public void setBackgroundColor(int colorNum) {
@@ -282,24 +291,24 @@ public class Turtle extends JFrame implements ComponentListener {
 		Color c = Color.black; // colorNums.get(i);
 
 		cur.pen.bgColor = c;
-		canvas.setBackgroundColor(c);
+		canvas.updatePen(cur.pen.bgColor, cur.pen.penColor, cur.pen.penMode, cur.pen.penWidth, true);
 	}
 	public void setBackgroundColor(int r, int g, int b) {
 		TurtleState cur = states.peek();
 		Color c = new Color(r, g, b);
 
 		cur.pen.bgColor = c;
-		canvas.setBackgroundColor(c);
+		canvas.updatePen(cur.pen.bgColor, cur.pen.penColor, cur.pen.penMode, cur.pen.penWidth, true);
 	}
 
 
 	//
 	//	Other Drawing Functions
 	//
-	public void arc(int radius, double rads) {
+	public void arc(int radius, double degArc) {
 		TurtleState cur = states.peek();
 		if(cur.pen.penDown)
-			canvas.drawArc(cur.x, cur.y, radius, Math.toRadians(cur.heading), rads);
+			canvas.drawArc(cur.x, cur.y, radius, cur.heading, -1 * degArc);
 	}
 	public void fill() {
 		TurtleState cur = states.peek();
@@ -344,7 +353,7 @@ public class Turtle extends JFrame implements ComponentListener {
     public void tempDrawArc(int r, double degArc) {
         TurtleState cur = states.peek();
 
-        canvas.drawArc(cur.x, cur.y, r, Math.toRadians(cur.heading), Math.toRadians(degArc));
+        canvas.drawArc(cur.x, cur.y, r, cur.heading, degArc);
     }
 
 	public void tempFloodFill(int x, int y) {
@@ -353,6 +362,6 @@ public class Turtle extends JFrame implements ComponentListener {
 
 	public void tempSetPenColor(Color c)
 	{
-		canvas.setPenColor(c);
+		this.setPenRGB(c.getRed(), c.getGreen(), c.getBlue());
 	}
 }
