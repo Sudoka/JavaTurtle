@@ -1,1 +1,251 @@
-My GitHub Page
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Turtle, in Java</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le styles -->
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+      .fw-font{
+      	font-family: "Inconsolata", "Andale Mono",  monospace;
+      	font-weight: "bold";
+      }
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="ico/favicon.ico">
+
+  </head>
+
+  <body data-spy="scroll" data-target=".navbar">
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="brand active" href="#top">Java Turtle</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li><a href="#github">Github</a></li>
+              <li><a href="#faq">FAQ</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">API</a>
+                <ul class="dropdown-menu" role="menu">
+                  <li class="fw-font"><a href="#ctor">Turtle(String, int, int)</a></li>
+                  <li class="divider"></li>
+                  <li class="fw-font"><a href="#fwd">forward(int)</a></li>
+                  <li class="fw-font"><a href="#bw">backward(int)</a></li>
+                  <li class="fw-font"><a href="#lt">left(float)</a></li>
+                  <li class="fw-font"><a href="#rt">right(float)</a></li>
+                  <li class="fw-font"><a href="#arc">arc(int, float)</a></li>
+                  <li class="fw-font"><a href="#lbl">label(String)</a></li>
+                  <li class="fw-font"><a href="#xy">setXY(int, int)</a></li>
+                  <li class="fw-font"><a href="#hd">setHeading(float)</a></li>
+                  <li class="fw-font"><a href="#hm">home()</a></li>
+                  <li class="divider"></li>
+                  <li class="fw-font"><a href="#pus">push()</a></li>
+                  <li class="fw-font"><a href="#pop">pop()</a></li>
+                  <li class="fw-font"><a href="#pdn">setPenDown(boolean)</a></li>
+                  <li class="fw-font"><a href="#psz">setPenSize(int)</a></li>
+                  <li class="fw-font"><a href="#pcl">setPenColor(int)</a></li>
+                  <li class="fw-font"><a href="#prgb">setPenRGB(int, int, int)</a></li>
+                  <li class="fw-font"><a href="#bcl">setBackgroundColor(int)</a></li>
+                  <li class="fw-font"><a href="#brgb">setBackgroundRGB(int, int, int)</a></li>
+                  <li class="fw-font"><a href="#plcl">setPaletteColor(int, int, int, int)</a></li>
+                  <li class="fw-font"><a href="#st">showTurtle(boolean)</a></li>
+                  <li class="fw-font"><a href="#cl">clean()</a></li>
+                  <li class="fw-font"><a href="#cs">clearScreen()</a></li>
+                </ul>
+              </div>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span3">
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list side-navbar">
+              <li class="nav-header">Constructor</li>
+              <li class="fw-font"><a href="#ctor">Turtle(String, int, int)</a></li>
+
+              <li class="nav-header">Turtle movement</li>
+              <li class="fw-font"><a href="#fwd">forward(int)</a></li>
+              <li class="fw-font"><a href="#bw">backward(int)</a></li>
+              <li class="fw-font"><a href="#lt">left(float)</a></li>
+              <li class="fw-font"><a href="#rt">right(float)</a></li>
+              <li class="fw-font"><a href="#arc">arc(int, float)</a></li>
+              <li class="fw-font"><a href="#lbl">label(String)</a></li>
+              <li class="fw-font"><a href="#xy">setXY(int, int)</a></li>
+              <li class="fw-font"><a href="#hd">setHeading(float)</a></li>
+              <li class="fw-font"><a href="#hm">home()</a></li>
+              
+              <li class="nav-header">Turtle state</li>
+              <li class="fw-font"><a href="#pus">push()</a></li>
+              <li class="fw-font"><a href="#pop">pop()</a></li>
+              <li class="fw-font"><a href="#pdn">setPenDown(boolean)</a></li>
+              <li class="fw-font"><a href="#psz">setPenSize(int)</a></li>
+              <li class="fw-font"><a href="#pcl">setPenColor(int)</a></li>
+              <li class="fw-font"><a href="#prgb">setPenRGB(int, int, int)</a></li>
+              <li class="fw-font"><a href="#bcl">setBackgroundColor(int)</a></li>
+              <li class="fw-font"><a href="#brgb">setBackgroundRGB(int, int, int)</a></li>
+              <li class="fw-font"><a href="#plcl">setPaletteColor(int, int, int, int)</a></li>
+              <li class="fw-font"><a href="#st">showTurtle(boolean)</a></li>
+              <li class="fw-font"><a href="#cl">clean()</a></li>
+              <li class="fw-font"><a href="#cs">clearScreen()</a></li>
+            </ul>
+          </div><!--/.well -->
+        </div><!--/span-->
+        <div class="span9">
+          <div class="well" id="faq">
+            <h3>FAQ / Example</h3>
+            <pre class="pre-scrollable">
+// new up a turtle so we can draw
+Turtle myTurtle = new Turtle("Logo is Awesome", 500, 500);
+
+// show the turtle by calling this
+myTurtle.clearScreen();
+
+// or by drawing something - like a square
+for(int i=0; i &lt; 4; i++) {
+    myTurtle.forward(100);
+    myTurtle.left(90);
+}
+
+// if you're going to support drawing recursively (for things like fractals)
+// then you have to use the .push() and .pop() methods to store the state
+function tree(Turtle t, int dist=50, ) {
+    // doing this allows the turtle to return to its previous position &amp; heading
+    // when this function returns
+    t.push();
+
+    if(dist > 4) {
+        t.forward(dist);
+        t.left(20);
+
+        tree(t, 2 * dist / 3);
+
+        t.right(40);
+
+        tree(t, 2 * dist / 3);
+    }
+
+    t.pop();
+}
+            </pre>
+          </div>
+          <div class="row-fluid">
+          	<h3 id="ctor">Constructor</h3>
+          	<pre class="fw-font">Turtle(String title, int height, int width)</pre>
+          	<p>The constructor is pretty straight forward. You need only provide a title string
+          		along with a height and width for the window. The turtle will be positioned at (0, 0)
+          		pointing north, which corresponds to the center of your window pointing up.</p>
+          </div><!--/row-->
+          <div class="row-fluid">
+          	<h3>Turtle Movement</h3>
+          	<pre id="fwd">forward(int distance)</pre>
+          	<p>Move the turtle forward the distance specified.</p>
+
+          	<pre id="bw">backward(int distance)</pre>
+          	<p>Move the turtle backward the distance specified.</p>
+
+          	<pre id="lt">left(float degrees)</pre>
+          	<p>Rotate the turtle counter-clockwise the number of degrees specified.</p>
+
+          	<pre id="rt">right(float degrees)</pre>
+          	<p>Rotate the turtle clockwise the number of degrees specified</p>
+          	
+            <pre id="arc">arc(int radius, float arc)</pre>
+            <p>Draw an arc with the radius: <code>radius</code> through <code>arc</code> degrees. The arc is drawn using the turtle's current position as the center of a circle with radius: <code>radius</code>, the arc begins at the turtle's
+              current heading and proceeds <code>arc</code> degrees.<br/><strong>The turtle's state 
+              is not modified by this function.</strong></p>
+
+            <pre id="lbl">label(String textToWrite)</pre>
+            <p>Write text to the screen with the top-left corner of the bouding box for the text
+              at the turtle's current position. <br/><strong>The turtle's state is not modified 
+              by this function.</strong></p>
+
+            <pre id="xy">setXY(int x, int y)</pre>
+            <p>Set the turtle's position to (<code>x</code>, <code>y</code>).</p>
+
+            <pre id="hd">setHeading(float newHeading)</pre>
+            <p>Set the turtle's heading to <code>newHeading</code></p>
+
+            <pre id="hm">home()</pre>
+            <p>Return the turtle to <span class="fw-font">(0, 0)</span> with a heading of 
+              <span class="fw-font">0&deg;</span> (north/up)</p>
+          </div>
+          <div class="row-fluid">
+            <h3>Turtle State</h3>
+            <pre id="pus">push()</pre>
+            <p></p>
+
+            <pre id="pop">pop()</pre>
+            <p></p>
+
+            <pre id="pdn">setPenDown(boolean penDown)</pre>
+            <p></p>
+
+            <pre id="psz">setPenSize(int diameter)</pre>
+            <p></p>
+
+            <pre id="pcl">setPenColor(int paletteColor)</pre>
+            <p></p>
+
+            <pre id="prgb">setPenRGB(int red, int green, int blue)</pre>
+            <p></p>
+
+            <pre id="bcl">setBackgroundColor(int paletteColor)</pre>
+            <p></p>
+
+            <pre id="brgb">setBackgroundRGB(int red, int green, int blue)</pre>
+            <p></p>
+
+            <pre id="plcl">setPaletteColor(int colorNum, int red, int green, int blue)</pre>
+            <p></p>
+
+            <pre id="st">showTurtle(boolean turtleVisible)</pre>
+            <p></p>
+
+            <pre id="cl">clean()</pre>
+            <p></p>
+
+            <pre id="cs">clearScreen()</pre>
+            <p></p>
+
+          </div>
+        </div><!--/span-->
+      </div><!--/row-->
+
+      <hr>
+
+      <footer>
+        <p>MSU CSE450</p>
+      </footer>
+
+    </div><!--/.fluid-container-->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+  </body>
+</html>
