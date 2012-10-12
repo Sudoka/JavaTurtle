@@ -21,6 +21,20 @@
       	font-family: "Inconsolata", "Andale Mono",  monospace;
       	font-weight: "bold";
       }
+      #p_colors_demo li, #p_colors li {
+        font-size: 16px;
+        margin: 10px 0;        
+      }
+      #p_colors li {
+        margin-left: 8px;
+      }
+      #p_colors_demo li {
+        list-style: none;
+        margin-left: -10px;
+      }
+      #p_colors_demo {
+        margin-left: 10px;
+      }
     </style>
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -33,7 +47,7 @@
 
   </head>
 
-  <body data-spy="scroll" data-target=".navbar">
+  <body data-spy="scroll" data-target=".navbar" data-offset="60">
 
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
@@ -44,10 +58,14 @@
               <li><a href="#github">Github</a></li>
               <li><a href="#faq">FAQ</a></li>
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">API</a>
+                <a class="dropdown-toggle" data-toggle="dropdown">Constructor</a>
                 <ul class="dropdown-menu" role="menu">
                   <li class="fw-font"><a href="#ctor">Turtle(String, int, int)</a></li>
-                  <li class="divider"></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown">Movement</a>
+                <ul class="dropdown-menu" role="menu">
                   <li class="fw-font"><a href="#fwd">forward(int)</a></li>
                   <li class="fw-font"><a href="#bw">backward(int)</a></li>
                   <li class="fw-font"><a href="#lt">left(float)</a></li>
@@ -57,7 +75,11 @@
                   <li class="fw-font"><a href="#xy">setXY(int, int)</a></li>
                   <li class="fw-font"><a href="#hd">setHeading(float)</a></li>
                   <li class="fw-font"><a href="#hm">home()</a></li>
-                  <li class="divider"></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown">Turtle State</a>
+                <ul class="dropdown-menu" role="menu">
                   <li class="fw-font"><a href="#pus">push()</a></li>
                   <li class="fw-font"><a href="#pop">pop()</a></li>
                   <li class="fw-font"><a href="#pdn">setPenDown(boolean)</a></li>
@@ -71,7 +93,13 @@
                   <li class="fw-font"><a href="#cl">clean()</a></li>
                   <li class="fw-font"><a href="#cs">clearScreen()</a></li>
                 </ul>
-              </div>
+              </li>
+               <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown">Constants</a>
+                <ul class="dropdown-menu" role="menu">
+                  <li class="fw-font"><a href="#p_colors">Turtle colors</a></li>
+                </ul>
+              </li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -82,7 +110,7 @@
       <div class="row-fluid">
         <div class="span3">
           <div class="well sidebar-nav">
-            <ul class="nav nav-list side-navbar">
+            <ul class="nav nav-list">
               <li class="nav-header">Constructor</li>
               <li class="fw-font"><a href="#ctor">Turtle(String, int, int)</a></li>
 
@@ -110,6 +138,9 @@
               <li class="fw-font"><a href="#st">showTurtle(boolean)</a></li>
               <li class="fw-font"><a href="#cl">clean()</a></li>
               <li class="fw-font"><a href="#cs">clearScreen()</a></li>
+
+              <li class="nav-header">Turtle constants</li>
+              <li class="fw-font"><a href="#p_colors">Turtle colors</a></li>
             </ul>
           </div><!--/.well -->
         </div><!--/span-->
@@ -159,28 +190,28 @@ function tree(Turtle t, int dist=50, ) {
           		pointing north, which corresponds to the center of your window pointing up.</p>
           </div><!--/row-->
           <div class="row-fluid">
-          	<h3>Turtle Movement</h3>
-          	<pre id="fwd">forward(int distance)</pre>
-          	<p>Move the turtle forward the distance specified.</p>
+          	<h3 id="move">Turtle Movement</h3>
+          	<pre id="fwd">forward(int d)</pre>
+          	<p>Move the turtle <code>d</code> units forward.</p>
 
-          	<pre id="bw">backward(int distance)</pre>
-          	<p>Move the turtle backward the distance specified.</p>
+          	<pre id="bw">backward(int d)</pre>
+          	<p>Move the turtle <code>d</code> units backward.</p>
 
-          	<pre id="lt">left(float degrees)</pre>
-          	<p>Rotate the turtle counter-clockwise the number of degrees specified.</p>
+          	<pre id="lt">left(float deg)</pre>
+          	<p>Rotate the turtle counter-clockwise <code>deg</code> degrees.</p>
 
-          	<pre id="rt">right(float degrees)</pre>
-          	<p>Rotate the turtle clockwise the number of degrees specified</p>
+          	<pre id="rt">right(float deg)</pre>
+          	<p>Rotate the turtle clockwise <code>deg</code> degrees.</p>
           	
             <pre id="arc">arc(int radius, float arc)</pre>
             <p>Draw an arc with the radius: <code>radius</code> through <code>arc</code> degrees. The arc is drawn using the turtle's current position as the center of a circle with radius: <code>radius</code>, the arc begins at the turtle's
               current heading and proceeds <code>arc</code> degrees.<br/><strong>The turtle's state 
               is not modified by this function.</strong></p>
 
-            <pre id="lbl">label(String textToWrite)</pre>
-            <p>Write text to the screen with the top-left corner of the bouding box for the text
-              at the turtle's current position. <br/><strong>The turtle's state is not modified 
-              by this function.</strong></p>
+            <pre id="lbl">label(String text)</pre>
+            <p>Draw <code>text</code> to the screen with the top-left corner of the 
+              bouding box for the text at the turtle's current position. <br/>
+              <strong>The turtle's state is not modified by this function.</strong></p>
 
             <pre id="xy">setXY(int x, int y)</pre>
             <p>Set the turtle's position to (<code>x</code>, <code>y</code>).</p>
@@ -193,21 +224,30 @@ function tree(Turtle t, int dist=50, ) {
               <span class="fw-font">0&deg;</span> (north/up)</p>
           </div>
           <div class="row-fluid">
-            <h3>Turtle State</h3>
+            <h3 id="state">Turtle State</h3>
             <pre id="pus">push()</pre>
-            <p></p>
+            <p>The <code>push</code> function is used in conjunction with the 
+              <code>pop()</code> function, described next, to store state information about 
+              the turtle in order to facilitate recursive drawing.  You must call 
+              <code>push()</code> before <code>pop()</code>&mdash;nasty undefined behavior 
+              results from calling <code>push()</code> more times than <code>pop()</code>
+              <small>(which probably means it'll crash)</small></p>
 
             <pre id="pop">pop()</pre>
-            <p></p>
+            <p>The counterpart function to <code>push()</code>. It is used to restore the
+              previous turtle state so that drawing can resume from the state the turtle was
+              in before the preceeding function was called.</p>
 
             <pre id="pdn">setPenDown(boolean penDown)</pre>
-            <p></p>
+            <p>Sets the turtle's <i>pen_down</i> attribute&mdash;if <i>pen_down</i> is true 
+              then lines are drawn whenever the turtle is moved. To move the turtle without 
+              marking the canvas call <code>setPenDown(false)</code>.</p>
 
             <pre id="psz">setPenSize(int diameter)</pre>
-            <p></p>
+            <p>Used to change the size of the pen used to draw on the canvas. Defaults to 1px.</p>
 
             <pre id="pcl">setPenColor(int paletteColor)</pre>
-            <p></p>
+            <p>Sets the pen color to the color specified in the palette. See <a href="#p_colors">the list of colors</a> predefined by logo.</p>
 
             <pre id="prgb">setPenRGB(int red, int green, int blue)</pre>
             <p></p>
@@ -230,6 +270,51 @@ function tree(Turtle t, int dist=50, ) {
             <pre id="cs">clearScreen()</pre>
             <p></p>
 
+          </div>
+          <div class="row-fluid">
+            <h2 id="const">Turtle Constants</h2>
+            <h3>Turtle Colors</h3>
+            <div class="well well-small span3" style="background: #999;">
+              <ol id="p_colors">
+                <li style="color: #000000;">black</li>
+                <li style="color: #0000ff;">blue</li>
+                <li style="color: #00ff00;">green</li>
+                <li style="color: #00ffff;">cyan</li>
+                <li style="color: #ff0000;">red</li>
+                <li style="color: #ff00ff;">magenta</li>
+                <li style="color: #ffff00;">yellow</li>
+                <li style="color: #ffffff;">white</li>
+                <li style="color: #a0522d;">brown</li>
+                <li style="color: #d2b48c;">tan</li>
+                <li style="color: #228b22;">forest</li>
+                <li style="color: #00ffff;">aqua</li>
+                <li style="color: #fa8072;">salmon</li>
+                <li style="color: #800080;">purple</li>
+                <li style="color: #ffc800;">orange</li>
+                <li style="color: #808080;">grey</li>
+              </ol>
+              
+            </div>
+            <div class="side-nav well well-small span2" style="background: #444;">
+              <ul id="p_colors_demo">
+                <li style="background: #000000;">&nbsp;</li>
+                <li style="background: #0000ff;">&nbsp;</li>
+                <li style="background: #00ff00;">&nbsp;</li>
+                <li style="background: #00ffff;">&nbsp;</li>
+                <li style="background: #ff0000;">&nbsp;</li>
+                <li style="background: #ff00ff;">&nbsp;</li>
+                <li style="background: #ffff00;">&nbsp;</li>
+                <li style="background: #ffffff;">&nbsp;</li>
+                <li style="background: #a0522d;">&nbsp;</li>
+                <li style="background: #d2b48c;">&nbsp;</li>
+                <li style="background: #228b22;">&nbsp;</li>
+                <li style="background: #00ffff;">&nbsp;</li>
+                <li style="background: #fa8072;">&nbsp;</li>
+                <li style="background: #800080;">&nbsp;</li>
+                <li style="background: #ffc800;">&nbsp;</li>
+                <li style="background: #808080;">&nbsp;</li>
+              </ol>
+            </div>
           </div>
         </div><!--/span-->
       </div><!--/row-->
