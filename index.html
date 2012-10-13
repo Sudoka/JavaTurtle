@@ -7,9 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Le styles -->
-    <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
+      @font-face {
+        font-family: 'inconsolatamedium';
+        src: url('inconsolata-webfont.eot');
+        src: url('inconsolata-webfont.eot?#iefix') format('embedded-opentype'),
+             url('inconsolata-webfont.woff') format('woff'),
+             url('inconsolata-webfont.ttf') format('truetype'),
+             url('inconsolata-webfont.svg#inconsolatamedium') format('svg');
+        font-weight: normal;
+        font-style: normal;
+      }
       body {
         padding-top: 60px;
         padding-bottom: 40px;
@@ -17,9 +26,12 @@
       .sidebar-nav {
         padding: 9px 0;
       }
-      .fw-font{
+      .fw-font {
       	font-family: "Inconsolata", "Andale Mono",  monospace;
-      	font-weight: "bold";
+      }
+      .fw-font-big {
+        font-family: "Inconsolata", "Andale Mono",  monospace;
+        font-size: 15px;
       }
       #p_colors_demo li, #p_colors li {
         font-size: 16px;
@@ -37,6 +49,7 @@
       }
     </style>
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/sunburst.css" rel="stylesheet">
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -47,7 +60,7 @@
 
   </head>
 
-  <body data-spy="scroll" data-target=".navbar" data-offset="60">
+  <body data-spy="scroll" data-target=".navbar" data-offset="60" onload="prettyPrint()">
 
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
@@ -64,7 +77,8 @@
                 </ul>
               </li>
               <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown">Movement</a>
+                <a class="dropdown-toggle" data-toggle="dropdown">Movement
+                  <b class="caret"></b></a>
                 <ul class="dropdown-menu" role="menu">
                   <li class="fw-font"><a href="#fwd">forward(int)</a></li>
                   <li class="fw-font"><a href="#bw">backward(int)</a></li>
@@ -78,7 +92,8 @@
                 </ul>
               </li>
               <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown">Turtle State</a>
+                <a class="dropdown-toggle" data-toggle="dropdown">Turtle State
+                  <b class="caret"></b></a>
                 <ul class="dropdown-menu" role="menu">
                   <li class="fw-font"><a href="#pus">push()</a></li>
                   <li class="fw-font"><a href="#pop">pop()</a></li>
@@ -95,7 +110,8 @@
                 </ul>
               </li>
                <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown">Constants</a>
+                <a class="dropdown-toggle" data-toggle="dropdown">Constants
+                  <b class="caret"></b></a>
                 <ul class="dropdown-menu" role="menu">
                   <li class="fw-font"><a href="#p_colors">Turtle colors</a></li>
                 </ul>
@@ -147,7 +163,7 @@
         <div class="span9">
           <div class="well" id="faq">
             <h3>FAQ / Example</h3>
-            <pre class="pre-scrollable">
+            <pre class="pre-scrollable prettyprint lang-java fw-font-big">
 // new up a turtle so we can draw
 Turtle myTurtle = new Turtle("Logo is Awesome", 500, 500);
 
@@ -172,9 +188,7 @@ function tree(Turtle t, int dist=50, ) {
         t.left(20);
 
         tree(t, 2 * dist / 3);
-
         t.right(40);
-
         tree(t, 2 * dist / 3);
     }
 
@@ -247,28 +261,41 @@ function tree(Turtle t, int dist=50, ) {
             <p>Used to change the size of the pen used to draw on the canvas. Defaults to 1px.</p>
 
             <pre id="pcl">setPenColor(int paletteColor)</pre>
-            <p>Sets the pen color to the color specified in the palette. See <a href="#p_colors">the list of colors</a> predefined by logo.</p>
+            <p>Sets the pen color to the color specified in the palette. See <a href="#p_colors">the
+              list of colors</a> predefined by logo. A value of <code>paletteColor</code> which 
+              does not correspond to a color defined in the palette is ignored.</p>
 
             <pre id="prgb">setPenRGB(int red, int green, int blue)</pre>
-            <p></p>
+            <p>Sets the pen to the color denoted by the triplet (<code>red</code>, 
+              <code>green</code>, <code>blue</code>). <em>This does not alter any of the colors
+              in the palette, for to change the palette see <a href="#plcl"><span class="fw-font">
+              setPaletteColor</span></a></em></p>
 
             <pre id="bcl">setBackgroundColor(int paletteColor)</pre>
-            <p></p>
+            <p>Sets the background color to one of the colors defined in the palette. A value of 
+              <code>paletteColor</code> which does not correspond to a color defined in the 
+              palette is ignored.</p>
 
             <pre id="brgb">setBackgroundRGB(int red, int green, int blue)</pre>
-            <p></p>
+            <p>Sets the background color directly to the color denoted by the triplet (<code>red
+            </code>, <code>green</code>, <code>blue</code>). <em>This does not alter any of the
+              colors in the palette, for to change the palette see <a href="#plcl">
+              <span class="fw-font">setPaletteColor</span></a></em></p>
 
             <pre id="plcl">setPaletteColor(int colorNum, int red, int green, int blue)</pre>
-            <p></p>
+            <p>Sets one of the colors in the palette to the color denoted by the triplet 
+              (<code>red</code>, <code>green</code>, <code>blue</code>). If <code>colorNum</code> 
+              is greater than the size of the palette the new color is added to the end of the
+              palette, extending the palette.</p>
 
             <pre id="st">showTurtle(boolean turtleVisible)</pre>
-            <p></p>
+            <p>Used to determine whether or not the turtle is shown while drawing.</p>
 
             <pre id="cl">clean()</pre>
-            <p></p>
+            <p>Clears the canvas but does not effect the turtle's position or heading.</p>
 
             <pre id="cs">clearScreen()</pre>
-            <p></p>
+            <p>Clears the canvas and returns the turtle to its inital state.</p>
 
           </div>
           <div class="row-fluid">
@@ -331,6 +358,7 @@ function tree(Turtle t, int dist=50, ) {
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <script src="js/bootstrap.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/prettify.js"></script>
   </body>
 </html>
