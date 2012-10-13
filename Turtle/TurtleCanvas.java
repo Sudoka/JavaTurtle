@@ -49,6 +49,10 @@ public class TurtleCanvas extends JPanel {
         return new Dimension(canvas.getWidth(), canvas.getHeight());
     }
 
+    public void erase() {
+        
+    }
+
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;

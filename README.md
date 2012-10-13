@@ -15,16 +15,7 @@ setPenSize, setPenColor, setPenRGB, setBackgroundColor
 
 arc, drawText, fill
 
-
-## Native Turtle commands from Logo
-The full command is listed first, followed by an alias in *italics*–if one exists,
-any arguments follow the command name.  This is not a full list of the commands which
-Logo defines, merely the ones upon which this library is based.
-
-### Graphics context
-clearscreen *cs*, clean, hideturtle  *ht*, showturtle  *st*, wrap, window, fence
-
-#### Colors:
+### Colors:
 
 0. black
 1. blue
@@ -43,18 +34,19 @@ clearscreen *cs*, clean, hideturtle  *ht*, showturtle  *st*, wrap, window, fence
 14. orange
 15. grey
 
-### Drawing
-penup *pu*, pendown *pd*, penpaint *ppt*, penerase *pe*
+### Window Modes:
 
-setpencolor *setpc* color, setpensize size, setbackgroundcolor *setbg* color, setpalette colornum [r, g, b]
+0. WINDOW
+1. FENCE
+2. WRAP
 
-fill, label text
+### Pen Modes:
 
-setpos [x, y], setxy x y, setx x, sety y, setheading *seth* deg, home
-
-forward *fd* distance, back *bk* distance, right *rt* degrees, left *lt* degrees, arc angle radius
+0. PAINT
+1. ERASE
+2. INVERT
 
 ## Aditional functions added by this library
 
 ### Drawing
-setpenrgb *setrgb* [r, g, b]
+setpenrgb [r, g, b]
