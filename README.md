@@ -34,6 +34,17 @@ arc, drawText, fill
 14. orange
 15. grey
 
+### Window Modes:
+
+0. WINDOW
+1. FENCE
+2. WRAP
+
+### Pen Modes:
+
+0. PAINT
+1. ERASE
+2. INVERT
 
 ## Aditional functions added by this library
 

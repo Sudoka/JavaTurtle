@@ -32,12 +32,68 @@ import java.util.*;
  * date: 09-16-2012
  */
 public class Turtle extends JFrame implements ComponentListener {
+	private class TurtleState {
+		protected int x;
+		protected int y;
+		protected double heading;
+
+		protected Color bgColor;
+		protected Color penColor;
+		protected boolean penDown;
+		protected int penWidth;
+		
+		protected PenMode penMode;
+		protected WindowMode winMode;
+		protected boolean showTurtle;
+		
+		public TurtleState() {
+			this(0, 0, 0);
+		}
+
+		public TurtleState(int x_, int y_, float head)
+		{
+			x = x_;
+			y = y_;
+			heading  = head;
+			
+			bgColor = Color.black;
+            penColor = Color.white;
+            penDown = true;
+            penWidth = 1;
+
+            showTurtle = true;
+            penMode = PenMode.PAINT;
+			winMode = WindowMode.WINDOW;
+		}
+		public TurtleState(TurtleState old) {
+			this.x = old.x;
+			this.y = old.y;
+			this.heading  = old.heading;
+
+			this.bgColor = old.bgColor;
+			this.penColor = old.penColor;
+			this.penDown = old.penDown;
+			this.penWidth = old.penWidth;
+
+			this.showTurtle = old.showTurtle;
+			this.winMode = old.winMode;
+			this.penMode = old.penMode;
+		}
+
+		public String toString() {
+			String sp = "";
+			sp += ((int)heading / 100) == 0 ? " " : "";
+			sp += ((int)heading /  10) == 0 ? " " : "";
+			return "("+x+", "+y+") h: "+sp+heading+" pd: "+pen.penDown;
+		}
+	}
+
 	private Stack <TurtleState> states;
 	private TurtleCanvas canvas;
 	private int width;
 	private int height;
 
-	// debug stuff:
+	//---- debug stuff:
 	protected boolean debug;
 	private Vector <String> debugStates;
 
@@ -47,16 +103,25 @@ public class Turtle extends JFrame implements ComponentListener {
 		}
 	}
 
+	public Turtle() {
+		this("Logo Turtle Graphics", 500, 500, false);
+	}
+
+	public Turtle(String title, int width, int height) {
+		this(title, width, height, false);
+	}
+
 	public Turtle(String title, int w, int h, boolean dbg) {
 		super(title);
 
 		width = w;
 		height = h;
 		canvas = new TurtleCanvas(w, h);
-		debugStates = new Vector <String> ();
 		states = new Stack <TurtleState> ();
 		states.push(new TurtleState(w/2, h/2, 0));
 		debug = dbg;
+
+		debugStates = new Vector <String> ();
 
 		this.add(canvas);
 
@@ -71,71 +136,9 @@ public class Turtle extends JFrame implements ComponentListener {
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
 
-		Insets dec = this.getInsets();
-		this.setSize(this.width + dec.left + dec.right, this.height + dec.top + dec.bottom);
+		Insets chrome = this.getInsets();
+		this.setSize(this.width + chrome.left + chrome.right, this.height + chrome.top + chrome.bottom);
 	}
-
-	public Turtle(String title, int width, int height) {
-		this(title, width, height, false);
-	}
-
-	private class TurtleState {
-		protected int x;
-		protected int y;
-		protected double heading;
-
-		protected PenState pen;
-		protected WindowMode winMode;
-
-		public TurtleState() {
-			this(0, 0, 0);
-		}
-
-		public TurtleState(int x_, int y_, float head)
-		{
-			x = x_;
-			y = y_;
-			heading  = head;
-			pen = new PenState();
-			winMode = WindowMode.WINDOW;
-		}
-		public TurtleState(TurtleState old) {
-			this.x = old.x;
-			this.y = old.y;
-			this.heading  = old.heading;
-			this.pen = old.pen;
-			this.winMode = old.winMode;
-		}
-
-		public String toString() {
-			String sp = "";
-			sp += ((int)heading / 100) == 0 ? " " : "";
-			sp += ((int)heading /  10) == 0 ? " " : "";
-			return "("+x+", "+y+") h: "+sp+heading+" pd: "+pen.penDown;
-		}
-	}
-    
-    protected class PenState {
-        protected Color bgColor;
-        protected Color penColor;
-        protected boolean penDown;
-        protected PenMode penMode;
-        protected boolean showTurtle;
-        protected int     penWidth;
-
-        public PenState() {
-            this(Color.black, Color.white, true, false, PenMode.PAINT, 1);
-        }
-
-        public PenState(Color b, Color p, boolean dn, boolean st, PenMode mode, int width) {
-            this.bgColor = b;
-            this.penColor = p;
-            this.penDown = dn;
-            this.showTurtle = st;
-            this.penMode = mode;
-            this.penWidth = width;
-        }
-    }
 
 	//
 	//	Context Manipulation
@@ -155,16 +158,23 @@ public class Turtle extends JFrame implements ComponentListener {
 	}
 
 	public void clearScreen() {
+		if(!this.isVisible()) 
+			this.setVisible(true)
 
+		this.states.clear()
+		this.states.push(new TurtleState());
+
+		this.canvas.erase();
 	}
 	public void clean() {
-
+		this.canvas.erase();
 	}
 	public void showTurtle(boolean show) {
 		TurtleState cur = states.peek();
 		cur.pen.showTurtle = show;
+		canvas.showTurtle = show;
 	}
-	public void setTurtleMode(WindowMode mode) {
+	public void setWindowMode(WindowMode mode) {
 		TurtleState cur = states.peek();
 		cur.winMode = mode;
 	}
