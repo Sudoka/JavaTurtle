@@ -12,21 +12,21 @@
 
 }
 
-pre .str, code .str { color: #65B042; } /* string  - green */
-pre .kwd, code .kwd { color: #E28964; } /* keyword - dark pink */
-pre .com, code .com { color: #AEAEAE; font-style: italic; } /* comment - gray */
-pre .typ, code .typ { color: #89bdff; } /* type - light blue */
-pre .lit, code .lit { color: #3387CC; } /* literal - blue */
-pre .pun, code .pun { color: #fff; } /* punctuation - white */
-pre .pln, code .pln { color: #fff; } /* plaintext - white */
+pre .str, code .str { color: #E6DB74; } /* string  - green */
+pre .kwd, code .kwd { color: #F92672; } /* keyword - dark pink */
+pre .com, code .com { color: #75715E; font-style: italic; } /* comment - gray */
+pre .typ, code .typ { color: #66D9EF; } /* type - light blue */
+pre .lit, code .lit { color: #AE81FF; } /* literal - blue */
+pre .pun, code .pun { color: #F8F8F2; } /* punctuation - white */
+pre .pln, code .pln { color: #F8F8F2; } /* plaintext - white */
 pre .tag, code .tag { color: #89bdff; } /* html/xml tag    - light blue */
 pre .atn, code .atn { color: #bdb76b; } /* html/xml attribute name  - khaki */
 pre .atv, code .atv { color: #65B042; } /* html/xml attribute value - green */
-pre .dec, code .dec { color: #3387CC; } /* decimal - blue */
+pre .dec, code .dec { color: #AE81FF; } /* decimal - blue */
 
 pre.prettyprint, code.prettyprint {
 	font-family: font-family: "Inconsolata", "Andale Mono",  monospace;
-	background-color: #000;
+	background-color: #272822;
 	-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;
 	-o-border-radius: 8px;
@@ -45,7 +45,7 @@ pre.prettyprint {
 
 /* Specify class=linenums on a pre to get line numbering */
 ol.linenums { margin-top: 0; margin-bottom: 0; color: #AEAEAE; } /* IE indents via margin-left */
-li.L0,li.L1,li.L2,li.L3,li.L5,li.L6,li.L7,li.L8 { list-style-type: none }
+li.L0,li.L1,li.L2,li.L3,li.L5,li.L6,li.L7,li.L8 { }
 /* Alternate shading for lines */
 li.L1,li.L3,li.L5,li.L7,li.L9 { }
 

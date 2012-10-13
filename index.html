@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -73,7 +72,8 @@
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown">Constructor</a>
                 <ul class="dropdown-menu" role="menu">
-                  <li class="fw-font"><a href="#ctor">Turtle(String, int, int)</a></li>
+                  <li class="fw-font"><a href="#ctor1">Turtle()</a></li>
+                  <li class="fw-font"><a href="#ctor2">Turtle(String, int, int)</a></li>
                 </ul>
               </li>
               <li class="dropdown">
@@ -107,6 +107,8 @@
                   <li class="fw-font"><a href="#st">showTurtle(boolean)</a></li>
                   <li class="fw-font"><a href="#cl">clean()</a></li>
                   <li class="fw-font"><a href="#cs">clearScreen()</a></li>
+                  <li class="fw-font"><a href="#wm">setWindowMode(Turlte.WindowMode)</a></li>
+                  <li class="fw-font"><a href="#pm">setPenMode(Turtle.PenMode)</a></li>
                 </ul>
               </li>
                <li class="dropdown">
@@ -114,6 +116,8 @@
                   <b class="caret"></b></a>
                 <ul class="dropdown-menu" role="menu">
                   <li class="fw-font"><a href="#p_colors">Turtle colors</a></li>
+                  <li class="fw-font"><a href="#twm">Turtle.WindowMode</a></li>
+                  <li class="fw-font"><a href="#tpm">Turlte.PenMode</a></li>
                 </ul>
               </li>
             </ul>
@@ -128,7 +132,8 @@
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
               <li class="nav-header">Constructor</li>
-              <li class="fw-font"><a href="#ctor">Turtle(String, int, int)</a></li>
+              <li class="fw-font"><a href="#ctor1">Turtle()</a></li>
+              <li class="fw-font"><a href="#ctor2">Turtle(String, int, int)</a></li>
 
               <li class="nav-header">Turtle movement</li>
               <li class="fw-font"><a href="#fwd">forward(int)</a></li>
@@ -154,16 +159,20 @@
               <li class="fw-font"><a href="#st">showTurtle(boolean)</a></li>
               <li class="fw-font"><a href="#cl">clean()</a></li>
               <li class="fw-font"><a href="#cs">clearScreen()</a></li>
+              <li class="fw-font"><a href="#wm">setWindowMode(Turlte.WindowMode)</a></li>
+              <li class="fw-font"><a href="#pm">setPenMode(Turtle.PenMode)</a></li>
 
               <li class="nav-header">Turtle constants</li>
               <li class="fw-font"><a href="#p_colors">Turtle colors</a></li>
+              <li class="fw-font"><a href="#twm">Turtle.WindowMode</a></li>
+              <li class="fw-font"><a href="#tpm">Turlte.PenMode</a></li>
             </ul>
           </div><!--/.well -->
         </div><!--/span-->
         <div class="span9">
           <div class="well" id="faq">
             <h3>FAQ / Example</h3>
-            <pre class="pre-scrollable prettyprint lang-java fw-font-big">
+            <pre class="pre-scrollable prettyprint lang-java linenums fw-font-big">
 // new up a turtle so we can draw
 Turtle myTurtle = new Turtle("Logo is Awesome", 500, 500);
 
@@ -197,11 +206,15 @@ function tree(Turtle t, int dist=50, ) {
             </pre>
           </div>
           <div class="row-fluid">
-          	<h3 id="ctor">Constructor</h3>
-          	<pre class="fw-font">Turtle(String title, int height, int width)</pre>
-          	<p>The constructor is pretty straight forward. You need only provide a title string
-          		along with a height and width for the window. The turtle will be positioned at (0, 0)
-          		pointing north, which corresponds to the center of your window pointing up.</p>
+          	<h3>Constructor</h3>
+            <pre class="fw-font" id="ctor1">Turtle()</pre>
+            <p>The default constructor creates a window with a canvas size of <span>(500, 
+              500)</span> and a title of: "Logo Turtle Graphics"</p>
+          	<pre class="fw-font" id="ctor2">Turtle(String title, int height, int width)</pre>
+          	<p>The custom constructor is pretty straight forward. You need only provide a 
+              title string along with a height and width for the window. The turtle will be 
+              positioned at (0, 0) pointing north, which corresponds to the center of your 
+              window pointing up.</p>
           </div><!--/row-->
           <div class="row-fluid">
           	<h3 id="move">Turtle Movement</h3>
@@ -297,9 +310,18 @@ function tree(Turtle t, int dist=50, ) {
             <pre id="cs">clearScreen()</pre>
             <p>Clears the canvas and returns the turtle to its inital state.</p>
 
+            <pre id="wm">setWindowMode(Turlte.WindowMode)</pre>
+            <p>Sets the window mode to one of the window modes listed in <a class="fw-font" 
+              href="#twm">Turtle.WindowMode</a></p>
+
+            <pre id="pm">setPenMode(Turtle.PenMode)</pre>
+            <p>Sets the pen to one of the pen modes listed in <a class="fw-font" href="#tpm">
+              Turtle.PenMode</a></p>
           </div>
           <div class="row-fluid">
             <h2 id="const">Turtle Constants</h2>
+          </div>
+          <div class="row-fluid">
             <h3>Turtle Colors</h3>
             <div class="well well-small span3" style="background: #999;">
               <ol id="p_colors">
@@ -342,6 +364,21 @@ function tree(Turtle t, int dist=50, ) {
                 <li style="background: #808080;">&nbsp;</li>
               </ol>
             </div>
+          </div>
+          <div class="row-fluid">
+            <h3 id="twm">WindowModes</h3>
+              <ul>
+                <li>WINDOW - the turtle continues off the edge of the canvas.</li>
+                <li>FENCE - the turtle stops when it hits the edge of the canvas.</li>
+                <li>WRAP - when the turtle hits one side of the window it wraps back around 
+                  to the opposite side.</li>
+              </ul>
+            <h3 id="tpm">PenModes</h3>
+              <ul>
+                <li>PAINT - draws with the penColor, the default pen mode.</li>
+                <li>ERASE - draws with the backgroundColor.</li>
+                <li>INVERT - flips the color 180&deg; across the color wheel.</li>
+              </ul>
           </div>
         </div><!--/span-->
       </div><!--/row-->
