@@ -1,7 +1,7 @@
-package Turtle;
+package MSU.Turtle;
 
 import java.awt.Color;
-import Turtle.Turtle;
+import MSU.Turtle.Turtle;
 
 public class TestTurtle
 {
@@ -77,16 +77,22 @@ public class TestTurtle
 		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Logo Turtle");
 
 		Turtle myTurtle = new Turtle("Hello Turtle", 500, 500, true);
-		myTurtle.setVisible(true);
+		// myTurtle.clearScreen();
 
-		myTurtle.tempDrawLine(400, 400, 250, 250);
-		myTurtle.tempDrawLine(250, 250, 100, 400);
-		myTurtle.tempDrawLine(100, 400, 400, 400);
+		myTurtle.setPenDown(false);
+		myTurtle.setXY(150, -150);
+		myTurtle.setPenDown(true);
+		myTurtle.setXY(0, 0);
+		myTurtle.setXY(-150, -150);
+		myTurtle.setXY(150, -150);
+		myTurtle.setPenColor(4);
+		myTurtle.setPenDown(false);
+		myTurtle.setXY(0, -100);
+		myTurtle.fill();
 
-		myTurtle.tempSetPenColor(Color.RED);
-
-		myTurtle.tempFloodFill(250, 300);
-
+		myTurtle.setXY(0, 0);
+		myTurtle.setPenDown(true);
+		
 		for(int i = 0; i < 8; i++) {
 			double f = 0.125; double step = (2*Math.PI/3);
 		   	int red   = (int)(Math.sin(f*i*4 +      0) * 127) + 128;
@@ -99,48 +105,10 @@ public class TestTurtle
 			myTurtle.right(45);
 		}
 
-
-		// myTurtle.setPenDown(false);
-		// myTurtle.setPenRGB(102, 205, 170);
-		// myTurtle.setXY(20, 20);
-		// myTurtle.setPenDown(true);
-
-		// drawFractal(myTurtle, 50, 40);
-
-
-		// myTurtle.setPenRGB(154, 192, 205);
-		// myTurtle.setPenDown(false);
-		// myTurtle.setXY(-20, -20);
-		// myTurtle.setHeading(180);
-		// myTurtle.setPenDown(true);
-
-		// drawFractal(myTurtle, 50, 40);
-
-		// myTurtle.setPenRGB(238, 154, 73);
-		// myTurtle.setPenDown(false);
-		// myTurtle.setXY(-20, 20);
-		// myTurtle.setHeading(90);
-		// myTurtle.setPenDown(true);
-
-		// drawFractal(myTurtle, 50, 40);
-
-		// myTurtle.setPenRGB(191, 62, 255);
-		// myTurtle.setPenDown(false);
-		// myTurtle.setXY(20, -20);
-		// myTurtle.setHeading(270);
-		// myTurtle.setPenDown(true);
-
-		// drawFractal(myTurtle, 50, 40);
-
-		myTurtle.setPenDown(false);
-		myTurtle.setXY(240, 240);
-		myTurtle.setPenDown(true);
-		// myTurtle.fill();
-
         myTurtle.setPenDown(false);
         myTurtle.setXY(0, 0);
         myTurtle.setPenDown(true);
-        // myTurtle.tempSetPenColor(Color.WHITE);
+
         myTurtle.setPenRGB(255, 255, 255);
         myTurtle.setPenSize(5);
         myTurtle.setHeading(-45);
@@ -156,5 +124,12 @@ public class TestTurtle
         myTurtle.setXY(0, 100);
         myTurtle.setPenDown(true);
         myTurtle.label("Text!");
+
+        // myTurtle.clean();
+        // myTurtle.forward(50);
+
+        myTurtle.setBackgroundColor(10);
+        // myTurtle.clearScreen();
+        // myTurtle.forward(100);
 	}
 }

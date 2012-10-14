@@ -10,7 +10,7 @@
 // Stroke is kinda confusing but I'll figure it out soon.
 
 
-package Turtle;
+package MSU.Turtle;
 
 //import com.apple.eawt.Application;
 import javax.swing.*;
@@ -84,14 +84,16 @@ public class Turtle extends JFrame implements ComponentListener {
 			String sp = "";
 			sp += ((int)heading / 100) == 0 ? " " : "";
 			sp += ((int)heading /  10) == 0 ? " " : "";
-			return "("+x+", "+y+") h: "+sp+heading+" pd: "+pen.penDown;
+			return "("+x+", "+y+") h: "+sp+heading+" pd: "+penDown;
 		}
 	}
 
+	private ArrayList <Color> palette;
 	private Stack <TurtleState> states;
 	private TurtleCanvas canvas;
 	private int width;
 	private int height;
+	private boolean onScreen;
 
 	//---- debug stuff:
 	protected boolean debug;
@@ -116,15 +118,33 @@ public class Turtle extends JFrame implements ComponentListener {
 
 		width = w;
 		height = h;
+		onScreen = false;
 		canvas = new TurtleCanvas(w, h);
-		states = new Stack <TurtleState> ();
-		states.push(new TurtleState(w/2, h/2, 0));
-		debug = dbg;
+		states = new Stack<TurtleState> ();
+		states.push(new TurtleState(0, 0, 0));
 
+		palette = new ArrayList<Color> ();
+		palette.add(Color.black);
+		palette.add(Color.blue);
+		palette.add(Color.green);
+		palette.add(Color.cyan);
+		palette.add(Color.red);
+		palette.add(Color.magenta);
+		palette.add(Color.yellow);
+		palette.add(Color.white);
+		palette.add(new Color(160, 82, 45));
+		palette.add(new Color(210, 180, 140));
+		palette.add(new Color(34, 139, 34));
+		palette.add(new Color(0, 255, 255));
+		palette.add(new Color(250, 128, 114));
+		palette.add(new Color(128, 0, 128));
+		palette.add(Color.orange);
+		palette.add(Color.gray);		
+
+		debug = dbg;
 		debugStates = new Vector <String> ();
 
 		this.add(canvas);
-
 		// Do other swingy things
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -132,12 +152,19 @@ public class Turtle extends JFrame implements ComponentListener {
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
 		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Logo Turtle");
 	}
-
+	public boolean onScreen() {
+		return this.onScreen;
+	}
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
+		this.onScreen = visible;
 
 		Insets chrome = this.getInsets();
 		this.setSize(this.width + chrome.left + chrome.right, this.height + chrome.top + chrome.bottom);
+	}
+	public void showTurtleWindow() {
+		if(!this.onScreen())
+			this.setVisible(true);
 	}
 
 	//
@@ -158,20 +185,25 @@ public class Turtle extends JFrame implements ComponentListener {
 	}
 
 	public void clearScreen() {
-		if(!this.isVisible()) 
-			this.setVisible(true)
+		if(!this.onScreen()) 
+			this.setVisible(true);
 
-		this.states.clear()
+		this.states.clear();
 		this.states.push(new TurtleState());
 
-		this.canvas.erase();
+		this.canvas.fillCanvas();
 	}
 	public void clean() {
-		this.canvas.erase();
+		if(!this.onScreen()) 
+			this.setVisible(true);
+
+		this.canvas.fillCanvas();
 	}
 	public void showTurtle(boolean show) {
+		showTurtleWindow();
 		TurtleState cur = states.peek();
-		cur.pen.showTurtle = show;
+		cur.showTurtle = show;
+
 		canvas.showTurtle = show;
 	}
 	public void setWindowMode(WindowMode mode) {
@@ -179,7 +211,12 @@ public class Turtle extends JFrame implements ComponentListener {
 		cur.winMode = mode;
 	}
 	public void setPaletteColor(int colorNum, int r, int g, int b) {
-
+		Color newColor = new Color(r, g, b);
+		if(colorNum >= palette.size()) {
+			palette.add(newColor);
+		} else if(colorNum > 0) {
+			palette.set(colorNum, newColor);
+		}
 	}
 
 
@@ -187,19 +224,22 @@ public class Turtle extends JFrame implements ComponentListener {
 	//	Turtle Movement
 	//
 	public void forward(int dist) {
+		showTurtleWindow();
 		TurtleState cur = states.peek();
 
 		int x1, x2, y1, y2;
+		int xOff = canvas.getWidth() / 2;
+		int yOff = canvas.getHeight() / 2;
 		double h;
 
 		x1 = cur.x; y1 = cur.y;
-		h = Math.toRadians(cur.heading);
+		h = Math.toRadians(cur.heading+180);
 
 		x2 = x1 + (int)(dist * Math.sin(h));
 		y2 = y1 - (int)(dist * Math.cos(h));
 
-		if(cur.pen.penDown)
-			canvas.drawLine(x1, y1, x2, y2);
+		if(cur.penDown)
+			canvas.drawLine(xOff + x1, yOff - y1, xOff + x2, yOff - y2);
 
 		cur.x = x2;
 		cur.y = y2;
@@ -211,8 +251,9 @@ public class Turtle extends JFrame implements ComponentListener {
 		forward(-dist);
 	}
 	public void left(float deg) {
+		showTurtleWindow();
 		TurtleState cur = states.peek();
-		cur.heading -= (deg % 360);
+		cur.heading += (deg % 360);
 		if(cur.heading < 0)
 			cur.heading += 360;
 
@@ -228,33 +269,37 @@ public class Turtle extends JFrame implements ComponentListener {
 	//	Turtle Manipulation
 	//
 	public void setXY(int x, int y) {
+		showTurtleWindow();
 		TurtleState cur = states.peek();
-		int x1 = cur.x;
-		int y1 = cur.y;
-		int x2 = (canvas.getWidth() /2) + x;
-		int y2 = (canvas.getHeight()/2) - y;
+		int xOff = canvas.getWidth() / 2;
+		int yOff = canvas.getHeight() / 2;
+		int x1 = xOff + cur.x;
+		int y1 = yOff - cur.y;
+		int x2 = xOff + x;
+		int y2 = yOff - y;
 
-		if(cur.pen.penDown)
+		if(cur.penDown)
 			canvas.drawLine(x1, y1, x2, y2);
 
-		cur.x = x2;
-		cur.y = y2;
-
+		cur.x = x;
+		cur.y = y;
 		if(debug)
 			debugStates.add( cur.toString() );
 	}
 	public void setHeading(float deg) {
+		showTurtleWindow();
 		TurtleState cur = states.peek();
 		
-        deg += 270;
+		deg += 270;
         deg %= 360;
         deg = -deg;
 
 		cur.heading = deg;
 	}
 	public void home() {
+		showTurtleWindow();
 		TurtleState cur = states.peek();
-		if(cur.pen.penDown)
+		if(cur.penDown)
 			canvas.drawLine(cur.x, cur.y, 0, 0);
 
 		cur.x = 0;
@@ -264,51 +309,54 @@ public class Turtle extends JFrame implements ComponentListener {
 
 	public void setPenDown(boolean isDown) {
 		TurtleState cur = states.peek();
-		cur.pen.penDown = isDown;
-        
-        canvas.updatePen(cur.pen.bgColor, cur.pen.penColor, cur.pen.penMode, cur.pen.penWidth, false);
+		cur.penDown = isDown;
 	}
 	public void setPenMode(PenMode mode) {
 		TurtleState cur = states.peek();
-		cur.pen.penMode = mode;
-        
-		canvas.updatePen(cur.pen.bgColor, cur.pen.penColor, cur.pen.penMode, cur.pen.penWidth, false);
+		cur.penMode = mode;
+		canvas.penMode = mode;
 	}
 	public void setPenSize(int size) {
 		TurtleState cur = states.peek();
-        cur.pen.penWidth = size;
+        cur.penWidth = size;
         
-        canvas.updatePen(cur.pen.bgColor, cur.pen.penColor, cur.pen.penMode, cur.pen.penWidth, false);
+        canvas.setPenSize(size);
 	}
 
 	public void setPenColor(int colorNum) {
-		TurtleState cur = states.peek();
-		Color c = Color.white; // colorNums.get(i);
+		if(colorNum < palette.size()) {
+			TurtleState cur = states.peek();
+			Color c = palette.get(colorNum);
 
-		cur.pen.penColor = c;
-		canvas.updatePen(cur.pen.bgColor, cur.pen.penColor, cur.pen.penMode, cur.pen.penWidth, false);
+			cur.penColor = c;
+			canvas.setPenColor(c);
+		}
 	}
 	public void setPenRGB(int r, int g, int b) {
 		TurtleState cur = states.peek();
 		Color c = new Color(r, g, b);
 
-		cur.pen.penColor = c;
-		canvas.updatePen(cur.pen.bgColor, cur.pen.penColor, cur.pen.penMode, cur.pen.penWidth, false);
+		cur.penColor = c;
+		canvas.setPenColor(c);
 	}
 
 	public void setBackgroundColor(int colorNum) {
-		TurtleState cur = states.peek();
-		Color c = Color.black; // colorNums.get(i);
+		if(colorNum < palette.size()) {
+			showTurtleWindow();
+			TurtleState cur = states.peek();
+			Color c = palette.get(colorNum);
 
-		cur.pen.bgColor = c;
-		canvas.updatePen(cur.pen.bgColor, cur.pen.penColor, cur.pen.penMode, cur.pen.penWidth, true);
+			cur.bgColor = c;
+			canvas.setBackgroundColor(c);
+		}
 	}
-	public void setBackgroundColor(int r, int g, int b) {
+	public void setBackgroundRGB(int r, int g, int b) {
+		showTurtleWindow();
 		TurtleState cur = states.peek();
 		Color c = new Color(r, g, b);
 
-		cur.pen.bgColor = c;
-		canvas.updatePen(cur.pen.bgColor, cur.pen.penColor, cur.pen.penMode, cur.pen.penWidth, true);
+		cur.bgColor = c;
+		canvas.setBackgroundColor(c);
 	}
 
 
@@ -316,17 +364,26 @@ public class Turtle extends JFrame implements ComponentListener {
 	//	Other Drawing Functions
 	//
 	public void arc(int radius, double degArc) {
+		showTurtleWindow();
 		TurtleState cur = states.peek();
-		if(cur.pen.penDown)
-			canvas.drawArc(cur.x, cur.y, radius, cur.heading, -1 * degArc);
+		int xOff = canvas.getWidth() / 2;
+		int yOff = canvas.getHeight() / 2;
+		if(cur.penDown)
+			canvas.drawArc(xOff + cur.x, yOff + cur.y, radius, cur.heading, -1 * degArc);
 	}
 	public void fill() {
+		showTurtleWindow();
 		TurtleState cur = states.peek();
-		canvas.floodFill(cur.x, cur.y);
+		int xOff = canvas.getWidth() / 2; 
+		int yOff = canvas.getHeight() / 2;
+		canvas.floodFill(xOff + cur.x, yOff - cur.y);
 	}
 	public void label(String text) {
+		showTurtleWindow();
 		TurtleState cur = states.peek();
-		canvas.drawText(text, cur.x, cur.y);
+		int xOff = canvas.getWidth() / 2;
+		int yOff = canvas.getHeight() / 2;
+		canvas.drawText(text, xOff + cur.x, yOff - cur.y);
 	}
 
 
@@ -351,27 +408,5 @@ public class Turtle extends JFrame implements ComponentListener {
 	 */
 	public Dimension getPreferredSize() {
 		return new Dimension(canvas.getWidth(), canvas.getHeight());
-	}
-
-	/**
-	 *		Test harnass-y stuff
-	 */
-	public void tempDrawLine(int x0, int y0, int x1, int y1) {
-		canvas.drawLine(x0, y0, x1, y1);
-	}
-
-    public void tempDrawArc(int r, double degArc) {
-        TurtleState cur = states.peek();
-
-        canvas.drawArc(cur.x, cur.y, r, cur.heading, degArc);
-    }
-
-	public void tempFloodFill(int x, int y) {
-		canvas.floodFill(x, y);
-	}
-
-	public void tempSetPenColor(Color c)
-	{
-		this.setPenRGB(c.getRed(), c.getGreen(), c.getBlue());
 	}
 }

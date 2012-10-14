@@ -2,10 +2,13 @@ JC = javac
 JR = java -Xdock:icon=turtle.png
 
 default:
-	$(JC) Turtle/TestTurtle.java Turtle/Turtle.java
+	$(JC) MSU/Turtle/TestTurtle.java MSU/Turtle/Turtle.java MSU/Turtle/TurtleCanvas.java
 
 run:
-	$(JR) Turtle/TestTurtle
+	$(JR) MSU/Turtle/TestTurtle
 
 clean:
 	rm Turtle/*.class
+
+package:
+	jar cfm Turtle.jar Manifest.txt MSU
